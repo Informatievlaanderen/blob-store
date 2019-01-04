@@ -1,6 +1,6 @@
 {
   "name": "object-store",
-  "version": "1.0.2",
+  "version": "0.0.1",
   "description": "Object storage abstraction on top of SQL Server.",
   "author": "Basisregisters Vlaanderen",
   "license": "MIT",
@@ -140,7 +140,7 @@
       },
       {
         "path": "@semantic-release/exec",
-        "cmd": "node packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-nuget.js dist/Be.Vlaanderen.Basisregisters.Generators.Guid.Deterministic/Be.Vlaanderen.Basisregisters.Generators.Guid.Deterministic.${nextRelease.version}.nupkg"
+        "cmd": "node packages/Be.Vlaanderen.Basisregisters.Build.Pipeline/Content/ci-nuget.js dist/Be.Vlaanderen.Basisregisters.BlobStore/Be.Vlaanderen.Basisregisters.BlobStore.${nextRelease.version}.nupkg"
       },
       {
         "path": "@semantic-release/exec",

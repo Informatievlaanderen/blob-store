@@ -1,6 +1,6 @@
-# Be.Vlaanderen.Basisregisters.ObjectStore
+# Be.Vlaanderen.Basisregisters.BlobStore
 
-Object storage abstraction on top of SQL Server.
+Blob storage abstraction on top of SQL Server.
 
 ## Usage
 

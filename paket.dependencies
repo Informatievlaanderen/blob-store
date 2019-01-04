@@ -11,11 +11,18 @@ nuget Microsoft.NETCore.DotNetAppHost 2.2.0
 nuget Microsoft.NETCore.DotNetHostResolver 2.2.0
 nuget Microsoft.NETCore.DotNetHostPolicy 2.2.0
 
+//
+nuget System.Data.SqlClient
+
 // TEST STUFF
 nuget Microsoft.NET.Test.Sdk 15.9.0
 nuget xunit 2.4.1
 nuget xunit.runner.visualstudio 2.4.1
 nuget Shouldly 3.0.2
+nuget AutoFixture
+nuget AutoFixture.Idioms
+nuget Albedo
+nuget System.Collections.Immutable
 
 clitool dotnet-xunit 2.3.1
 

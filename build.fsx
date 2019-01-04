@@ -16,11 +16,11 @@ Target "Clean" (fun _ ->
 
 // Library ------------------------------------------------------------------------
 
-Target "Lib_Build" (fun _ -> build "Be.Vlaanderen.Basisregisters.ObjectStore")
-Target "Lib_Test" (fun _ -> [ "test" @@ "Be.Vlaanderen.Basisregisters.ObjectStore.Tests" ] |> List.iter testWithDotNet)
+Target "Lib_Build" (fun _ -> build "Be.Vlaanderen.Basisregisters.BlobStore")
+Target "Lib_Test" (fun _ -> [ "test" @@ "Be.Vlaanderen.Basisregisters.BlobStore.Tests" ] |> List.iter testWithDotNet)
 
-Target "Lib_Publish" (fun _ -> publish "Be.Vlaanderen.Basisregisters.ObjectStore")
-Target "Lib_Pack" (fun _ -> pack "Be.Vlaanderen.Basisregisters.ObjectStore")
+Target "Lib_Publish" (fun _ -> publish "Be.Vlaanderen.Basisregisters.BlobStore")
+Target "Lib_Pack" (fun _ -> pack "Be.Vlaanderen.Basisregisters.BlobStore")
 
 // --------------------------------------------------------------------------------
 

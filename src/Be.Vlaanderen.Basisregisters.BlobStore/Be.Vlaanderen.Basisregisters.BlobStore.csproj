@@ -12,7 +12,7 @@
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 
-    <RootNamespace>Be.Vlaanderen.Basisregisters.ObjectStore</RootNamespace>
+    <RootNamespace>Be.Vlaanderen.Basisregisters.BlobStore</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup>

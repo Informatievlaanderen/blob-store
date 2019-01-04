@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
 [assembly: AssemblyProduct("Vlaamse basisregisters")]
-[assembly: AssemblyDescription("Object storage abstraction on top of SQL Server.")]
+[assembly: AssemblyDescription("Blob storage abstraction on top of SQL Server.")]
 [assembly: AssemblyVersion("2.0.0.0")]
 [assembly: AssemblyFileVersion("2.0.0.0")]
 [assembly: AssemblyCopyright("Copyright (c) Vlaamse overheid")]

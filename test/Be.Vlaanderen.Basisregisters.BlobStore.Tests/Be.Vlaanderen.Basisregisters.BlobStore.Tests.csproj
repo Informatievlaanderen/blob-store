@@ -19,7 +19,7 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <RootNamespace>Be.Vlaanderen.Basisregisters.ObjectStore</RootNamespace>
+    <RootNamespace>Be.Vlaanderen.Basisregisters.BlobStore</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -28,7 +28,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Be.Vlaanderen.Basisregisters.ObjectStore\Be.Vlaanderen.Basisregisters.ObjectStore.csproj" />
+    <ProjectReference Include="..\..\src\Be.Vlaanderen.Basisregisters.BlobStore\Be.Vlaanderen.Basisregisters.BlobStore.csproj" />
   </ItemGroup>
 
   <Import Project="..\..\.paket\Paket.Restore.targets" />
