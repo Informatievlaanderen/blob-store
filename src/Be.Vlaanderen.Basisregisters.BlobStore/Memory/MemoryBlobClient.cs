@@ -37,7 +37,10 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Memory
 
             var stream = new MemoryStream();
             content.CopyTo(stream);
-            if (!_storage.TryAdd(name, new BlobObject(name, metadata, contentType, ct => Task.FromResult<Stream>(new MemoryStream(stream.ToArray())))))
+            if (!_storage.TryAdd(name, new BlobObject(name, metadata, contentType,
+                ct => Task.FromResult<Stream>(_storage.ContainsKey(name)
+                    ? new MemoryStream(stream.ToArray())
+                    : new MemoryStream()))))
             {
                 //TODO Exception
             }

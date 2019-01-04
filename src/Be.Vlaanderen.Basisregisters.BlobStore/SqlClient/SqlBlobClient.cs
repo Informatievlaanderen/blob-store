@@ -24,16 +24,10 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.SqlClient
 
         public async Task<BlobObject> GetBlobAsync(BlobName name, CancellationToken cancellationToken = default)
         {
-            var nameParameter = new SqlParameter(
+            var nameParameter = CreateSqlParameter(
                 "@Name",
-                SqlDbType.NChar,
+                SqlDbType.NVarChar,
                 BlobName.MaxLength,
-                ParameterDirection.Input,
-                false,
-                0,
-                0,
-                "",
-                DataRowVersion.Default,
                 name.ToString());
 
             using (var connection = new SqlConnection(_builder.ConnectionString))
@@ -63,11 +57,15 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.SqlClient
                                         Parameters = { nameParameter }
                                     };
                                     var contentReader = await contentCommand.ExecuteReaderAsync(ReaderBehavior, contentCancellationToken);
-                                    return new DisposableStream(
-                                        contentReader.GetStream(0),
-                                        contentReader,
-                                        contentCommand,
-                                        contentConnection);
+                                    if (!contentReader.IsClosed && contentReader.Read())
+                                    {
+                                        return new DisposableStream(
+                                            contentReader.GetStream(0),
+                                            contentReader,
+                                            contentCommand,
+                                            contentConnection);
+                                    }
+                                    return new MemoryStream();
                                 });
                         }
 
@@ -81,57 +79,78 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.SqlClient
         {
             if (content == null) throw new ArgumentNullException(nameof(content));
 
-            var nameParameter = new SqlParameter(
+            var nameParameter = CreateSqlParameter(
                 "@Name",
-                SqlDbType.NChar,
+                SqlDbType.NVarChar,
                 BlobName.MaxLength,
-                ParameterDirection.Input,
-                false,
-                0,
-                0,
-                "",
-                DataRowVersion.Default,
                 name.ToString());
-            var metadataParameter = new SqlParameter(
+            var metadataParameter = CreateSqlParameter(
                 "@Metadata",
                 SqlDbType.NVarChar,
                 -1,
-                ParameterDirection.Input,
-                false,
-                0,
-                0,
-                "",
-                DataRowVersion.Default,
                 MetadataToString(metadata));
-            var contentTypeParameter = new SqlParameter(
+            var contentTypeParameter = CreateSqlParameter(
                 "@ContentType",
                 SqlDbType.NVarChar,
                 ContentType.MaxLength,
-                ParameterDirection.Input,
-                false,
-                0,
-                0,
-                "",
-                DataRowVersion.Default,
                 contentType.ToString());
-            var contentParameter = new SqlParameter(
+            var contentParameter = CreateSqlParameter(
                 "@Content",
                 SqlDbType.VarBinary,
                 -1,
-                ParameterDirection.Input,
-                false,
-                0,
-                0,
-                "",
-                DataRowVersion.Default,
                 content);
             using (var connection = new SqlConnection(_builder.ConnectionString))
             {
                 await connection.OpenAsync(cancellationToken);
-                using (var command = new SqlCommand(_text.PutBlob(), connection)
+                using (var transaction = connection.BeginTransaction(IsolationLevel.Snapshot))
                 {
-                    CommandType = CommandType.Text,
-                    Parameters = {nameParameter, metadataParameter, contentTypeParameter, contentParameter}
+                    using (var command = new SqlCommand(_text.PutBlob(), connection, transaction)
+                    {
+                        CommandType = CommandType.Text,
+                        Parameters = {nameParameter, metadataParameter, contentTypeParameter, contentParameter}
+                    })
+                    {
+                        await command.ExecuteNonQueryAsync(cancellationToken);
+                    }
+                    transaction.Commit();
+                }
+            }
+        }
+
+        public async Task DeleteBlobAsync(BlobName name, CancellationToken cancellationToken = default)
+        {
+            var nameParameter = CreateSqlParameter(
+                "@Name",
+                SqlDbType.NVarChar,
+                BlobName.MaxLength,
+                name.ToString());
+
+            using (var connection = new SqlConnection(_builder.ConnectionString))
+            {
+                await connection.OpenAsync(cancellationToken);
+                using (var transaction = connection.BeginTransaction(IsolationLevel.Snapshot))
+                {
+                    using (var command = new SqlCommand(_text.DeleteBlob(), connection, transaction)
+                    {
+                        CommandType = CommandType.Text,
+                        Parameters = {nameParameter}
+                    })
+                    {
+                        await command.ExecuteNonQueryAsync(cancellationToken);
+                    }
+                    transaction.Commit();
+                }
+            }
+        }
+
+        public async Task CreateSchemaIfNotExists(CancellationToken cancellationToken = default)
+        {
+            using (var connection = new SqlConnection(_builder.ConnectionString))
+            {
+                await connection.OpenAsync(cancellationToken);
+                using (var command = new SqlCommand(_text.CreateSchemaIfNotExists(), connection)
+                {
+                    CommandType = CommandType.Text
                 })
                 {
                     await command.ExecuteNonQueryAsync(cancellationToken);
@@ -139,32 +158,19 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.SqlClient
             }
         }
 
-        public async Task DeleteBlobAsync(BlobName name, CancellationToken cancellationToken = default)
+        private static SqlParameter CreateSqlParameter(string name, SqlDbType sqlDbType, int size, object value)
         {
-            var nameParameter = new SqlParameter(
-                "@Name",
-                SqlDbType.NChar,
-                BlobName.MaxLength,
+            return new SqlParameter(
+                name,
+                sqlDbType,
+                size,
                 ParameterDirection.Input,
                 false,
                 0,
                 0,
                 "",
                 DataRowVersion.Default,
-                name.ToString());
-
-            using (var connection = new SqlConnection(_builder.ConnectionString))
-            {
-                await connection.OpenAsync(cancellationToken);
-                using (var command = new SqlCommand(_text.DeleteBlob(), connection)
-                {
-                    CommandType = CommandType.Text,
-                    Parameters = { nameParameter }
-                })
-                {
-                    await command.ExecuteNonQueryAsync(cancellationToken);
-                }
-            }
+                value);
         }
 
         private static Metadata MetadataFromString(string value)
@@ -188,8 +194,10 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.SqlClient
 
         private static KeyValuePair<MetadataKey, string> MetadatumFromString(string value)
         {
-            var parts = value.Split('=');
-            return new KeyValuePair<MetadataKey, string>(new MetadataKey(parts[0]), parts[1]);
+            var separatorPosition = value.IndexOf('=');
+            return new KeyValuePair<MetadataKey, string>(
+                new MetadataKey(value.Substring(0, separatorPosition)),
+                value.Substring(separatorPosition + 1));
         }
 
         private static string MetadataToString(Metadata metadata)
@@ -232,6 +240,25 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.SqlClient
 
             public string DeleteBlob() =>
                 $"DELETE FROM [{_schema}].[Blob] WHERE [NameHash] = HashBytes('SHA2_256', @Name)";
+
+            public string CreateSchemaIfNotExists() =>
+                $@"IF NOT EXISTS (SELECT * FROM SYS.SCHEMAS WHERE [Name] = N'{_schema}')
+BEGIN
+    EXEC('CREATE SCHEMA {_schema} AUTHORIZATION [dbo]')
+END
+
+IF NOT EXISTS (SELECT * FROM SYS.SYSOBJECTS WHERE [Name] = 'Blob' AND [XType] = 'U' AND [Schema_ID] = (SELECT [Schema_ID] FROM SYS.SCHEMAS WHERE [Name] = N'{_schema}'))
+BEGIN
+    CREATE TABLE [{_schema}].[Blob]
+    (
+        [NameHash]            BINARY(32)         NOT NULL
+        [Name]                NVARCHAR(512)      NOT NULL
+        [Metadata]            NVARCHAR(MAX)      NOT NULL
+        [ContentType]         NVARCHAR(129)      NOT NULL
+        [Content]             VARBINARY(MAX)     NOT NULL
+        CONSTRAINT PK_Blob    PRIMARY KEY        NONCLUSTERED (NameHash)
+    )
+END";
         }
 
         private class DisposableStream : Stream
