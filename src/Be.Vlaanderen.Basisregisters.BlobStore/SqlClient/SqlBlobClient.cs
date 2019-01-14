@@ -36,7 +36,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.SqlClient
                 using (var command = new SqlCommand(_text.GetBlob(), connection)
                 {
                     CommandType = CommandType.Text,
-                    Parameters = { nameParameter }
+                    Parameters = {nameParameter}
                 })
                 {
                     using (var reader = await command.ExecuteReaderAsync(ReaderBehavior, cancellationToken))
@@ -54,9 +54,18 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.SqlClient
                                     var contentCommand = new SqlCommand(_text.GetBlobContent(), contentConnection)
                                     {
                                         CommandType = CommandType.Text,
-                                        Parameters = { nameParameter }
+                                        Parameters = {
+                                            CreateSqlParameter(
+                                                "@Name",
+                                                SqlDbType.NVarChar,
+                                                BlobName.MaxLength,
+                                                name.ToString()
+                                            )
+                                        }
                                     };
-                                    var contentReader = await contentCommand.ExecuteReaderAsync(ReaderBehavior, contentCancellationToken);
+                                    var contentReader =
+                                        await contentCommand.ExecuteReaderAsync(ReaderBehavior,
+                                            contentCancellationToken);
                                     if (!contentReader.IsClosed && contentReader.Read())
                                     {
                                         return new DisposableStream(
@@ -65,7 +74,8 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.SqlClient
                                             contentCommand,
                                             contentConnection);
                                     }
-                                    return new MemoryStream();
+
+                                    throw new BlobNotFoundException(name);
                                 });
                         }
 
@@ -75,7 +85,12 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.SqlClient
             }
         }
 
-        public async Task PutBlobAsync(BlobName name, Metadata metadata, ContentType contentType, Stream content, CancellationToken cancellationToken = default)
+        public async Task CreateBlobAsync(
+            BlobName name,
+            Metadata metadata,
+            ContentType contentType,
+            Stream content,
+            CancellationToken cancellationToken = default)
         {
             if (content == null) throw new ArgumentNullException(nameof(content));
 
@@ -104,14 +119,22 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.SqlClient
                 await connection.OpenAsync(cancellationToken);
                 using (var transaction = connection.BeginTransaction(IsolationLevel.Snapshot))
                 {
-                    using (var command = new SqlCommand(_text.PutBlob(), connection, transaction)
+                    using (var command = new SqlCommand(_text.CreateBlob(), connection, transaction)
                     {
                         CommandType = CommandType.Text,
                         Parameters = {nameParameter, metadataParameter, contentTypeParameter, contentParameter}
                     })
                     {
-                        await command.ExecuteNonQueryAsync(cancellationToken);
+                        try
+                        {
+                            await command.ExecuteNonQueryAsync(cancellationToken);
+                        }
+                        catch (SqlException exception) when (exception.Number == 2627)
+                        {
+                            throw new BlobAlreadyExistsException(name, exception);
+                        }
                     }
+
                     transaction.Commit();
                 }
             }
@@ -138,22 +161,8 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.SqlClient
                     {
                         await command.ExecuteNonQueryAsync(cancellationToken);
                     }
-                    transaction.Commit();
-                }
-            }
-        }
 
-        public async Task CreateSchemaIfNotExists(CancellationToken cancellationToken = default)
-        {
-            using (var connection = new SqlConnection(_builder.ConnectionString))
-            {
-                await connection.OpenAsync(cancellationToken);
-                using (var command = new SqlCommand(_text.CreateSchemaIfNotExists(), connection)
-                {
-                    CommandType = CommandType.Text
-                })
-                {
-                    await command.ExecuteNonQueryAsync(cancellationToken);
+                    transaction.Commit();
                 }
             }
         }
@@ -202,7 +211,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.SqlClient
 
         private static string MetadataToString(Metadata metadata)
         {
-            if(ReferenceEquals(metadata, Metadata.None)) return string.Empty;
+            if (ReferenceEquals(metadata, Metadata.None)) return string.Empty;
 
             using (var writer = new StringWriter())
             {
@@ -235,30 +244,11 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.SqlClient
             public string GetBlobContent() =>
                 $"SELECT [Content] FROM [{_schema}].[Blob] WHERE [NameHash] = HashBytes('SHA2_256', @Name)";
 
-            public string PutBlob() =>
+            public string CreateBlob() =>
                 $"INSERT INTO [{_schema}].[Blob] ([NameHash], [Name], [Metadata], [ContentType], [Content]) VALUES (HashBytes('SHA2_256', @Name), @Name, @Metadata, @ContentType, @Content)";
 
             public string DeleteBlob() =>
                 $"DELETE FROM [{_schema}].[Blob] WHERE [NameHash] = HashBytes('SHA2_256', @Name)";
-
-            public string CreateSchemaIfNotExists() =>
-                $@"IF NOT EXISTS (SELECT * FROM SYS.SCHEMAS WHERE [Name] = N'{_schema}')
-BEGIN
-    EXEC('CREATE SCHEMA {_schema} AUTHORIZATION [dbo]')
-END
-
-IF NOT EXISTS (SELECT * FROM SYS.SYSOBJECTS WHERE [Name] = 'Blob' AND [XType] = 'U' AND [Schema_ID] = (SELECT [Schema_ID] FROM SYS.SCHEMAS WHERE [Name] = N'{_schema}'))
-BEGIN
-    CREATE TABLE [{_schema}].[Blob]
-    (
-        [NameHash]            BINARY(32)         NOT NULL
-        [Name]                NVARCHAR(512)      NOT NULL
-        [Metadata]            NVARCHAR(MAX)      NOT NULL
-        [ContentType]         NVARCHAR(129)      NOT NULL
-        [Content]             VARBINARY(MAX)     NOT NULL
-        CONSTRAINT PK_Blob    PRIMARY KEY        NONCLUSTERED (NameHash)
-    )
-END";
         }
 
         private class DisposableStream : Stream
@@ -272,12 +262,14 @@ END";
                 _disposables = disposables ?? throw new ArgumentNullException(nameof(disposables));
             }
 
-            public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
+            public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback callback,
+                object state)
             {
                 return _inner.BeginRead(buffer, offset, count, callback, state);
             }
 
-            public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
+            public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback callback,
+                object state)
             {
                 return _inner.BeginWrite(buffer, offset, count, callback, state);
             }
@@ -328,7 +320,8 @@ END";
                 return _inner.Read(buffer, offset, count);
             }
 
-            public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+            public override Task<int> ReadAsync(byte[] buffer, int offset, int count,
+                CancellationToken cancellationToken)
             {
                 return _inner.ReadAsync(buffer, offset, count, cancellationToken);
             }

@@ -10,3 +10,4 @@ dotnet-sourcelink
 AutoFixture
 AutoFixture.Idioms
 Albedo
+Docker.DotNet

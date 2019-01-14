@@ -23,6 +23,7 @@ nuget AutoFixture
 nuget AutoFixture.Idioms
 nuget Albedo
 nuget System.Collections.Immutable
+nuget Docker.DotNet
 
 clitool dotnet-xunit 2.3.1
 

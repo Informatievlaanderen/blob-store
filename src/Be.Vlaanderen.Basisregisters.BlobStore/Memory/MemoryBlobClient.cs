@@ -19,7 +19,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Memory
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                throw new OperationCanceledException(cancellationToken);
+                return Task.FromCanceled<BlobObject>(cancellationToken);
             }
 
             return _storage.TryGetValue(name, out var result)
@@ -27,34 +27,47 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Memory
                 : Task.FromResult<BlobObject>(null);
         }
 
-        public Task PutBlobAsync(BlobName name, Metadata metadata, ContentType contentType, Stream content,
+        public async Task CreateBlobAsync(BlobName name, Metadata metadata, ContentType contentType, Stream content,
             CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                throw new OperationCanceledException(cancellationToken);
+                await Task.FromCanceled(cancellationToken);
             }
 
-            var stream = new MemoryStream();
-            content.CopyTo(stream);
-            if (!_storage.TryAdd(name, new BlobObject(name, metadata, contentType,
-                ct => Task.FromResult<Stream>(_storage.ContainsKey(name)
-                    ? new MemoryStream(stream.ToArray())
-                    : new MemoryStream()))))
+            async Task<byte[]> Copy(Stream input, CancellationToken ct)
             {
-                //TODO Exception
+                using (var output = new MemoryStream())
+                {
+                    await input.CopyToAsync(output, 1024, ct);
+                    return output.ToArray();
+                }
             }
 
-            return Task.CompletedTask;
+            var buffer = await Copy(content, cancellationToken);
+            if (!_storage.TryAdd(name, new BlobObject(name, metadata, contentType,
+                ct =>
+                {
+                    if (_storage.ContainsKey(name))
+                    {
+                        return Task.FromResult<Stream>(new MemoryStream(buffer, false));
+                    }
+
+                    throw new BlobNotFoundException(name);
+                })))
+            {
+                throw new BlobAlreadyExistsException(name);
+            }
         }
 
         public Task DeleteBlobAsync(BlobName name, CancellationToken cancellationToken = default)
         {
-            if (!_storage.TryRemove(name, out _))
+            if (cancellationToken.IsCancellationRequested)
             {
-                //TODO Exception
+                return Task.FromCanceled(cancellationToken);
             }
 
+            _storage.TryRemove(name, out _);
             return Task.CompletedTask;
         }
     }
