@@ -5,18 +5,18 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
     using SqlClient;
     using Xunit;
 
-    public class SqlBlobClientTests : BlobClientTests, IClassFixture<SqlServerContainer>
+    public class SqlBlobClientTests : BlobClientTests, IClassFixture<SqlServer>
     {
-        private readonly SqlServerContainer _container;
+        private readonly SqlServer _server;
 
-        public SqlBlobClientTests(SqlServerContainer container)
+        public SqlBlobClientTests(SqlServer container)
         {
-            _container = container ?? throw new ArgumentNullException(nameof(container));
+            _server = container ?? throw new ArgumentNullException(nameof(container));
         }
 
         protected override async Task<IBlobClient> CreateClient()
         {
-            var builder = await _container.CreateDatabase();
+            var builder = await _server.CreateDatabase();
 
             await new SqlBlobSchema(builder)
                 .CreateSchemaIfNotExists("blobs");

@@ -6,19 +6,19 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
     using System.Threading.Tasks;
     using Framework;
 
-    public class SqlServerContainer : DockerContainer
+    public class SqlServerEmbeddedContainer : DockerContainer, ISqlServerDatabase
     {
         private const int HostPort = 21433;
         private const string Password = "E@syP@ssw0rd";
 
         private int _db;
 
-        public SqlServerContainer()
+        public SqlServerEmbeddedContainer()
         {
             Configuration = new SqlServerContainerConfiguration(CreateMasterConnectionStringBuilder());
         }
 
-        public SqlConnectionStringBuilder CreateMasterConnectionStringBuilder() =>
+        private SqlConnectionStringBuilder CreateMasterConnectionStringBuilder() =>
             CreateConnectionStringBuilder("master");
 
         private static SqlConnectionStringBuilder CreateConnectionStringBuilder(string database) =>
