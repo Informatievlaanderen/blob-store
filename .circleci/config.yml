@@ -6,8 +6,8 @@ jobs:
       - image: basisregisters/build-agent:latest
       - image: mcr.microsoft.com/mssql/server:latest
         environment:
-          ACCEPT_EULA=Y
-          SA_PASSWORD=E@syP@ssw0rd
+          ACCEPT_EULA: Y
+          SA_PASSWORD: E@syP@ssw0rd
 
     environment:
       MYGET_FEED: /F/basisregisters

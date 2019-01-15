@@ -5,11 +5,11 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Sql
     using System.Threading.Tasks;
     using Xunit;
 
-    public class SqlBlobSchemaTests : IClassFixture<SqlServerEmbeddedContainer>
+    public class SqlBlobSchemaTests : IClassFixture<SqlServer>
     {
-        private readonly SqlServerEmbeddedContainer _fixture;
+        private readonly SqlServer _fixture;
 
-        public SqlBlobSchemaTests(SqlServerEmbeddedContainer fixture)
+        public SqlBlobSchemaTests(SqlServer fixture)
         {
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }
