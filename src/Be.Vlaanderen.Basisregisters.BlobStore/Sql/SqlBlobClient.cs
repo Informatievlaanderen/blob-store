@@ -1,4 +1,4 @@
-namespace Be.Vlaanderen.Basisregisters.BlobStore.SqlClient
+namespace Be.Vlaanderen.Basisregisters.BlobStore.Sql
 {
     using System;
     using System.Collections.Generic;

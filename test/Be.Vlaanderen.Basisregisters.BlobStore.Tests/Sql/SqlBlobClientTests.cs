@@ -1,8 +1,7 @@
-namespace Be.Vlaanderen.Basisregisters.BlobStore
+namespace Be.Vlaanderen.Basisregisters.BlobStore.Sql
 {
     using System;
     using System.Threading.Tasks;
-    using SqlClient;
     using Xunit;
 
     public class SqlBlobClientTests : BlobClientTests, IClassFixture<SqlServer>

@@ -11,3 +11,5 @@ AutoFixture
 AutoFixture.Idioms
 Albedo
 Docker.DotNet
+
+System.Data.SqlClient

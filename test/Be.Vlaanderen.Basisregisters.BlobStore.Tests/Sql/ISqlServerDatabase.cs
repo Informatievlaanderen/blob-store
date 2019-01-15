@@ -1,4 +1,4 @@
-namespace Be.Vlaanderen.Basisregisters.BlobStore
+namespace Be.Vlaanderen.Basisregisters.BlobStore.Sql
 {
     using System.Data.SqlClient;
     using System.Threading.Tasks;
