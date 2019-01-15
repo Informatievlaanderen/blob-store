@@ -10,14 +10,14 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Sql
 
         public SqlServer()
         {
-            if (Environment.GetEnvironmentVariable("CI") == null)
-            {
-                _inner = new SqlServerEmbeddedContainer();
-            }
-            else
-            {
+//            if (Environment.GetEnvironmentVariable("CI") == null)
+//            {
+//                _inner = new SqlServerEmbeddedContainer();
+//            }
+//            else
+//            {
                 _inner = new SqlServerComposedContainer();
-            }
+//            }
         }
 
         public Task InitializeAsync()
