@@ -5,13 +5,14 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Sql
     using System.Threading.Tasks;
     using Xunit;
 
-    public class SqlBlobSchemaTests : IClassFixture<SqlServer>
+    [Collection(nameof(SqlServerCollection))]
+    public class SqlBlobSchemaTests
     {
-        private readonly SqlServer _fixture;
+        private readonly SqlServer _server;
 
-        public SqlBlobSchemaTests(SqlServer fixture)
+        public SqlBlobSchemaTests(SqlServer server)
         {
-            _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
+            _server = server ?? throw new ArgumentNullException(nameof(server));
         }
 
         [Fact]
@@ -19,7 +20,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Sql
         {
             //Arrange
             var schema = Guid.NewGuid().ToString("N");
-            var builder = await _fixture.CreateDatabase();
+            var builder = await _server.CreateDatabase();
             var sut = new SqlBlobSchema(builder);
 
             //Act
@@ -49,7 +50,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Sql
         {
             //Arrange
             var schema = Guid.NewGuid().ToString("N");
-            var builder = await _fixture.CreateDatabase();
+            var builder = await _server.CreateDatabase();
             var sut = new SqlBlobSchema(builder);
             await sut.CreateSchemaIfNotExists(schema);
 

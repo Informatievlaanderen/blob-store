@@ -32,6 +32,10 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Framework
 
             var self = Builder.CreateAnonymous(type);
             var other = Builder.CreateAnonymous(type);
+            while (other.Equals(self))
+            {
+                other = Builder.CreateAnonymous(type);
+            }
 
             object result;
             try

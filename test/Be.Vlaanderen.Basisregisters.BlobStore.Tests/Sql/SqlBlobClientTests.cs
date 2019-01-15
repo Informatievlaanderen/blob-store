@@ -4,13 +4,14 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Sql
     using System.Threading.Tasks;
     using Xunit;
 
-    public class SqlBlobClientTests : BlobClientTests, IClassFixture<SqlServer>
+    [Collection(nameof(SqlServerCollection))]
+    public class SqlBlobClientTests : BlobClientTests
     {
         private readonly SqlServer _server;
 
-        public SqlBlobClientTests(SqlServer container)
+        public SqlBlobClientTests(SqlServer server)
         {
-            _server = container ?? throw new ArgumentNullException(nameof(container));
+            _server = server ?? throw new ArgumentNullException(nameof(server));
         }
 
         protected override async Task<IBlobClient> CreateClient()
