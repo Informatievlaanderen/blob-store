@@ -8,7 +8,7 @@ authors Basisregisters Vlaanderen
 owners agentschap Informatie Vlaanderen <https://vlaanderen.be/informatie-vlaanderen>
 copyright Copyright (c) agentschap Informatie Vlaanderen
 requireLicenseAcceptance false
-projectUrl https://github.com/Informatievlaanderen/object-store
+projectUrl https://github.com/Informatievlaanderen/blob-store
 iconUrl https://raw.githubusercontent.com/Informatievlaanderen/build-pipeline/master/logo.png
 licenseUrl https://opensource.org/licenses/MIT
 
@@ -16,6 +16,7 @@ description Blob storage abstraction on top of SQL Server.
 
 dependencies
   framework: netstandard20
+    System.Data.SqlClient 4.6.0
 
 files
   bin\Release\netstandard2.0\Be.Vlaanderen.Basisregisters.BlobStore.dll => lib\netstandard2.0

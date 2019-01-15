@@ -12,7 +12,7 @@ nuget Microsoft.NETCore.DotNetHostResolver 2.2.0
 nuget Microsoft.NETCore.DotNetHostPolicy 2.2.0
 
 //
-nuget System.Data.SqlClient
+nuget System.Data.SqlClient 4.6.0
 nuget AWSSDK.S3
 
 // TEST STUFF
