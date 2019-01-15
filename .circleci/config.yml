@@ -22,6 +22,7 @@ jobs:
       GIT_COMMITTER_EMAIL: informatie.vlaanderen@vlaanderen.be
       CONFLUENCE_USERNAME: david.cumps@kb.vlaanderen.be
       SA_PASSWORD: E@syP@ssw0rd
+      CI: true
 
     steps:
       - checkout
