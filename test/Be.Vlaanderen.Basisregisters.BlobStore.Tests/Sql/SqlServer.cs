@@ -10,7 +10,6 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Sql
 
         public SqlServer()
         {
-#if DEBUG
             if (Environment.GetEnvironmentVariable("CI") == null)
             {
                 _inner = new SqlServerEmbeddedContainer();
@@ -19,9 +18,6 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Sql
             {
                 _inner = new SqlServerComposedContainer();
             }
-#else
-            _inner = new SqlServerComposedContainer();
-#endif
         }
 
         public Task InitializeAsync()
