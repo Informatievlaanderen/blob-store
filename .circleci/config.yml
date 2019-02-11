@@ -66,6 +66,8 @@ jobs:
           command: |
             if [ "$CIRCLE_BRANCH" != "master" ];
             then
+              echo 'export CI=true' >> ~/.bashrc
+              source ~/.bashrc
               ./build.sh;
             fi
 
