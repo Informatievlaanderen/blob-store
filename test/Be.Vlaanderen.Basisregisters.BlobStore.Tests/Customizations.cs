@@ -149,7 +149,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
             fixture.Customize<Metadata>(customization =>
                 customization.FromFactory<int>(value =>
                     fixture
-                        .CreateMany<KeyValuePair<MetadataKey, string>>(new Random(value).Next(1, 100))
+                        .CreateMany<KeyValuePair<MetadataKey, string>>(new Random(value).Next(1, 5))
                         .Aggregate(Metadata.None,
                             (data, metadatum) => data.Add(metadatum))
                 ));

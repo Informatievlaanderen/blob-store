@@ -91,6 +91,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Framework
                     Image = Configuration.Image.FullyQualifiedName,
                     Name = Configuration.Container.Name,
                     Tty = true,
+                    Cmd = Configuration.Container.Command,
                     Env = Configuration.Container.EnvironmentVariables,
                     HostConfig = new HostConfig
                     {

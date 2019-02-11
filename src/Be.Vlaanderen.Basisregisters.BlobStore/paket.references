@@ -2,3 +2,4 @@ SourceLink.Embed.AllSourceFiles
 SourceLink.Copy.PdbFiles
 System.Data.SqlClient
 System.Collections.Immutable
+AWSSDK.S3
