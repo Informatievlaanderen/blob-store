@@ -27,7 +27,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Sql
                     Encrypt = false,
                     Enlist = false,
                     IntegratedSecurity = false
-                };;
+                };
         }
 
         public async Task InitializeAsync()

@@ -1,11 +1,9 @@
 namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
 {
-    using System.Collections.ObjectModel;
+    using System;
     using System.Threading;
     using System.Threading.Tasks;
-    using Amazon;
     using Amazon.S3.Model;
-    using Sql;
     using Xunit;
 
     [Collection(nameof(S3Collection))]
@@ -17,7 +15,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
 
         public S3BlobClientTests(S3Server server)
         {
-            _server = server;
+            _server = server ?? throw new ArgumentNullException(nameof(server));
         }
 
         protected override async Task<IBlobClient> CreateClient()
