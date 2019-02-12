@@ -22,7 +22,13 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
             return new Metadata(_metadata.Add(metadatum));
         }
 
-        public bool Equals(Metadata other) => other != null && _metadata.SequenceEqual(other._metadata, MetadatumComparer.Instance);
+        public bool Equals(Metadata other) => other != null &&
+                                              _metadata
+                                                  .OrderBy(left => left.Key)
+                                                  .SequenceEqual(
+                                                      other._metadata
+                                                          .OrderBy(right => right.Key),
+                                                      MetadatumComparer.Instance);
         public override bool Equals(object obj) => obj is Metadata other && Equals(other);
         public override int GetHashCode() => _metadata.Aggregate(0, (hashCode, current) =>
             current.Key.GetHashCode() ^ current.Value?.GetHashCode() ?? 0 ^ hashCode);

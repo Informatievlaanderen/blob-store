@@ -6,6 +6,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using Amazon.Runtime;
     using Amazon.S3;
     using Amazon.S3.Model;
 
@@ -23,25 +24,63 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
 
         public async Task<BlobObject> GetBlobAsync(BlobName name, CancellationToken cancellationToken = default)
         {
-            var response = await _client.GetObjectAsync(new GetObjectRequest
+            try
             {
-                BucketName = _bucket,
-                Key = name.ToString(),
-                ByteRange = NoData
-            }, cancellationToken);
-            return new BlobObject(
-                name,
-                ConvertMetadataFromMetadataCollection(response),
-                ContentType.Parse(response.Headers.ContentType),
-                async contentCancellationToken =>
+                var response = await _client.GetObjectAsync(new GetObjectRequest
                 {
-                    var contentResponse = await _client.GetObjectAsync(new GetObjectRequest
+                    BucketName = _bucket,
+                    Key = name.ToString(),
+                    ByteRange = NoData
+                }, cancellationToken);
+                return new BlobObject(
+                    name,
+                    ConvertMetadataFromMetadataCollection(response),
+                    ContentType.Parse(response.Headers.ContentType),
+                    async contentCancellationToken =>
                     {
-                        BucketName = _bucket,
-                        Key = name.ToString()
-                    }, contentCancellationToken);
-                    return contentResponse.ResponseStream;
-                });
+                        try
+                        {
+                            var contentResponse = await _client.GetObjectAsync(new GetObjectRequest
+                            {
+                                BucketName = _bucket,
+                                Key = name.ToString()
+                            }, contentCancellationToken);
+                            return contentResponse.ResponseStream;
+                        }
+                        catch (AmazonS3Exception exception) when (
+                            exception.ErrorType == ErrorType.Sender
+                            && string.Equals(exception.ErrorCode, "NoSuchKey", StringComparison.OrdinalIgnoreCase))
+                        {
+                            throw new BlobNotFoundException(name, exception);
+                        }
+                    });
+            }
+            catch (AmazonS3Exception exception) when (
+                exception.ErrorType == ErrorType.Sender
+                && string.Equals(exception.ErrorCode, "NoSuchKey", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+        }
+
+        public async Task<bool> BlobExistsAsync(BlobName name, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await _client.GetObjectAsync(new GetObjectRequest
+                {
+                    BucketName = _bucket,
+                    Key = name.ToString(),
+                    ByteRange = NoData
+                }, cancellationToken);
+                return true;
+            }
+            catch (AmazonS3Exception exception) when (
+                exception.ErrorType == ErrorType.Sender
+                && string.Equals(exception.ErrorCode, "NoSuchKey", StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
         }
 
         private static Metadata ConvertMetadataFromMetadataCollection(GetObjectResponse response) =>
@@ -51,11 +90,20 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
                 .Aggregate(
                     Metadata.None,
                     (current, key) =>
-                        current.Add(new KeyValuePair<MetadataKey, string>(new MetadataKey(key), response.Metadata[key])));
+                        current.Add(
+                            new KeyValuePair<MetadataKey, string>(
+                                new MetadataKey(key).WithoutPrefix("x-amz-meta-"),
+                                response.Metadata[key])));
 
         public async Task CreateBlobAsync(BlobName name, Metadata metadata, ContentType contentType, Stream content,
             CancellationToken cancellationToken = default)
         {
+            // S3 does not have real concurrency control, this is simply a best effort approach
+            if (await BlobExistsAsync(name, cancellationToken))
+            {
+                throw new BlobAlreadyExistsException(name);
+            }
+
             var request = new PutObjectRequest
             {
                 BucketName = _bucket,
@@ -66,21 +114,14 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
                 AutoCloseStream = false
             };
             CopyMetadataToMetadataCollection(metadata, request.Metadata);
-            try
-            {
-                await _client.PutObjectAsync(request, cancellationToken);
-            }
-            catch (AmazonS3Exception exception)
-            {
-                throw new BlobAlreadyExistsException(name, exception);
-            }
+            await _client.PutObjectAsync(request, cancellationToken);
         }
 
         private static void CopyMetadataToMetadataCollection(Metadata source, MetadataCollection destination)
         {
             foreach (var item in source)
             {
-                destination.Add(item.Key.ToString(), item.Value);
+                destination.Add(item.Key.WithPrefix("x-amz-meta-").ToString(), item.Value);
             }
         }
 

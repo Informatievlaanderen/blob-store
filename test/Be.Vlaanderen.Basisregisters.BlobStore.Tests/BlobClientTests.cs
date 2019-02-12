@@ -173,6 +173,32 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
             Assert.Null(await sut.GetBlobAsync(name));
         }
 
+        [Fact]
+        public async Task BlobExistsForExistingBlobHasExpectedResult()
+        {
+            var sut = await CreateClient();
+            var name = _fixture.Create<BlobName>();
+            var metadata = _fixture.Create<Metadata>();
+            var contentType = _fixture.Create<ContentType>();
+            var bytes = _fixture.CreateMany<byte>(new Random().Next(1, 100)).ToArray();
+            var inputStream = new MemoryStream(bytes);
+
+            await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+
+            var result = await sut.BlobExistsAsync(name);
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task BlobExistsForNonExistingBlobHasExpectedResult()
+        {
+            var sut = await CreateClient();
+            var name = _fixture.Create<BlobName>();
+
+            var result = await sut.BlobExistsAsync(name);
+            Assert.False(result);
+        }
+
         protected abstract Task<IBlobClient> CreateClient();
     }
 }

@@ -85,6 +85,28 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Sql
             }
         }
 
+        public async Task<bool> BlobExistsAsync(BlobName name, CancellationToken cancellationToken = default)
+        {
+            var nameParameter = CreateSqlParameter(
+                "@Name",
+                SqlDbType.NVarChar,
+                BlobName.MaxLength,
+                name.ToString());
+
+            using (var connection = new SqlConnection(_builder.ConnectionString))
+            {
+                await connection.OpenAsync(cancellationToken);
+                using (var command = new SqlCommand(_text.BlobExists(), connection)
+                {
+                    CommandType = CommandType.Text,
+                    Parameters = {nameParameter}
+                })
+                {
+                    return 0 != (int)await command.ExecuteScalarAsync(cancellationToken);
+                }
+            }
+        }
+
         public async Task CreateBlobAsync(
             BlobName name,
             Metadata metadata,
@@ -243,6 +265,9 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Sql
 
             public string GetBlobContent() =>
                 $"SELECT [Content] FROM [{_schema}].[Blob] WHERE [NameHash] = HashBytes('SHA2_256', @Name)";
+
+            public string BlobExists() =>
+                $"SELECT COUNT(*) FROM [{_schema}].[Blob] WHERE [NameHash] = HashBytes('SHA2_256', @Name)";
 
             public string CreateBlob() =>
                 $"INSERT INTO [{_schema}].[Blob] ([NameHash], [Name], [Metadata], [ContentType], [Content]) VALUES (HashBytes('SHA2_256', @Name), @Name, @Metadata, @ContentType, @Content)";

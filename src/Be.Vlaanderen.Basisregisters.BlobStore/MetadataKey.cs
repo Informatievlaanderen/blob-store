@@ -3,7 +3,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
     using System;
     using System.Linq;
 
-    public readonly struct MetadataKey : IEquatable<MetadataKey>
+    public readonly struct MetadataKey : IEquatable<MetadataKey>, IComparable<MetadataKey>
     {
         public const int MaxLength = 128;
 
@@ -35,8 +35,22 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
                     nameof(value));
             }
 
-            _value = value;
+            _value = value.ToLowerInvariant();
         }
+
+        public MetadataKey WithPrefix(string prefix)
+        {
+            if (prefix == null) throw new ArgumentNullException(nameof(prefix));
+            return _value.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) ? this : new MetadataKey(prefix + _value);
+        }
+
+        public MetadataKey WithoutPrefix(string prefix)
+        {
+            if (prefix == null) throw new ArgumentNullException(nameof(prefix));
+            return !_value.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) ? this : new MetadataKey(_value.Substring(prefix.Length));
+        }
+
+        public int CompareTo(MetadataKey other) => string.CompareOrdinal(_value, other._value);
 
         public bool Equals(MetadataKey other) => _value == other._value;
         public override bool Equals(object other) => other is MetadataKey instance && Equals(instance);

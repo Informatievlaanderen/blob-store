@@ -141,7 +141,8 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
 
         private static string CreateMetadataKeyString(int seed)
         {
-            return new string('a', new Random(seed).Next(1, MetadataKey.MaxLength + 1));
+            var random = new Random(seed);
+            return new string((char)random.Next(97, 123), random.Next(1, MetadataKey.MaxLength + 1));
         }
 
         public static void CustomizeMetadata(this IFixture fixture)
