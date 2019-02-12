@@ -7,13 +7,13 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
         public BlobName Name { get; }
 
         public BlobAlreadyExistsException(BlobName name)
-            : base("The blob with name {0} already exists.")
+            : base($"The blob with name {name} already exists.")
         {
             Name = name;
         }
-        
+
         public BlobAlreadyExistsException(BlobName name, Exception exception)
-            : base("The blob with name {0} already exists.", exception)
+            : base($"The blob with name {name} already exists.", exception)
         {
             Name = name;
         }

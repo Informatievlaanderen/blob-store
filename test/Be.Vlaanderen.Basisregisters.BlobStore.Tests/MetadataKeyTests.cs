@@ -3,9 +3,12 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection.Metadata;
+    using Albedo;
     using AutoFixture;
     using AutoFixture.Idioms;
     using AutoFixture.Kernel;
+    using Docker.DotNet.Models;
     using Framework;
     using Xunit;
 
@@ -31,13 +34,6 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
             var customizedString = new Fixture();
             customizedString.CustomizeMetadataKeyString();
             new CompositeIdiomaticAssertion(
-                new GuardClauseAssertion(
-                    _fixture,
-                    new CompositeBehaviorExpectation(
-                        new NullReferenceBehaviorExpectation(),
-                        new EmptyStringBehaviorExpectation()
-                    )
-                ),
                 new ImplicitConversionOperatorAssertion<string>(
                     new CompositeSpecimenBuilder(customizedString, _fixture)),
                 new EquatableEqualsSelfAssertion(_fixture),
@@ -54,6 +50,18 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
                 new EqualsSuccessiveAssertion(_fixture),
                 new GetHashCodeSuccessiveAssertion(_fixture)
             ).Verify(typeof(MetadataKey));
+        }
+
+        [Fact]
+        public void VerifyCtor()
+        {
+            new GuardClauseAssertion(
+                _fixture,
+                new CompositeBehaviorExpectation(
+                    new NullReferenceBehaviorExpectation(),
+                    new EmptyStringBehaviorExpectation()
+                )
+            ).Verify(Constructors.Select(() => new MetadataKey(null)));
         }
 
         [Fact]
@@ -148,6 +156,129 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
                         .Take(3)
                         .ToArray()
                 );
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(WithPrefixCases))]
+        public void WithPrefixReturnsExpectedResult(string prefix, MetadataKey sut, MetadataKey expected)
+        {
+            var result = sut.WithPrefix(prefix);
+
+            Assert.Equal(expected, result);
+        }
+
+        public static IEnumerable<object[]> WithPrefixCases
+        {
+            get
+            {
+                var fixture = new Fixture();
+                fixture.CustomizeMetadataKey();
+                var key1 = fixture.Create<MetadataKey>();
+                yield return new object[]
+                {
+                    "",
+                    key1,
+                    key1
+                };
+
+                var prefix = fixture.Create<string>();
+                var key2 = fixture.Create<MetadataKey>();
+                yield return new object[]
+                {
+                    prefix,
+                    key2,
+                    new MetadataKey(prefix + key2)
+                };
+
+                var upper = prefix.ToUpperInvariant();
+                yield return new object[]
+                {
+                    upper,
+                    key2,
+                    new MetadataKey(upper + key2)
+                };
+
+                yield return new object[]
+                {
+                    upper,
+                    new MetadataKey(prefix + key2),
+                    new MetadataKey(prefix + key2)
+                };
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(WithoutPrefixCases))]
+        public void WithoutPrefixReturnsExpectedResult(string prefix, MetadataKey sut, MetadataKey expected)
+        {
+            var result = sut.WithoutPrefix(prefix);
+
+            Assert.Equal(expected, result);
+        }
+
+        public static IEnumerable<object[]> WithoutPrefixCases
+        {
+            get
+            {
+                var fixture = new Fixture();
+                fixture.CustomizeMetadataKey();
+                var key = fixture.Create<MetadataKey>();
+                yield return new object[]
+                {
+                    "",
+                    key,
+                    key
+                };
+
+                var prefix = fixture.Create<string>();
+                var key2 = fixture.Create<MetadataKey>();
+                yield return new object[]
+                {
+                    prefix,
+                    new MetadataKey(prefix + key2),
+                    key2
+                };
+
+                var upper = prefix.ToUpperInvariant();
+                yield return new object[]
+                {
+                    upper,
+                    new MetadataKey(upper + key2),
+                    key2
+                };
+
+                yield return new object[]
+                {
+                    upper,
+                    new MetadataKey(prefix + key2),
+                    key2
+                };
+            }
+        }
+
+        [Fact]
+        public void IsComparable()
+        {
+            Assert.IsAssignableFrom<IComparable<MetadataKey>>(_fixture.Create<MetadataKey>());
+        }
+
+        [Theory]
+        [MemberData(nameof(CompareCases))]
+        public void CompareReturnsExpectedResult(MetadataKey left, MetadataKey right, int expected)
+        {
+            var result = left.CompareTo(right);
+
+            Assert.Equal(expected, result);
+        }
+
+        public static IEnumerable<object[]> CompareCases
+        {
+            get
+            {
+                yield return new object[] {new MetadataKey("a"), new MetadataKey("b"), -1};
+                yield return new object[] {new MetadataKey("b"), new MetadataKey("a"), 1};
+                yield return new object[] {new MetadataKey("a"), new MetadataKey("a"), 0};
             }
         }
     }

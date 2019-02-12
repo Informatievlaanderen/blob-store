@@ -1,6 +1,8 @@
 namespace Be.Vlaanderen.Basisregisters.BlobStore
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using AutoFixture;
     using AutoFixture.Idioms;
     using AutoFixture.Kernel;
@@ -20,7 +22,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
         [Fact]
         public void MaximumLengthReturnsExpectedValue()
         {
-            Assert.Equal(512, BlobName.MaxLength);
+            Assert.Equal(128, BlobName.MaxLength);
         }
 
         [Fact]
@@ -78,6 +80,89 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
 
             var value = new string((char) new Random().Next(97, 123), length);
             Assert.Throws<ArgumentException>(() => new BlobName(value));
+        }
+
+        [Theory]
+        [MemberData(nameof(WellformedCases))]
+        public void ValueIsWellformed(string value)
+        {
+            Assert.NotEqual(default, new BlobName(value));
+        }
+
+        public static IEnumerable<object[]> WellformedCases
+        {
+            get { return WellformedBlobNames.Select(@case => new object[] { @case }); }
+        }
+
+        public static IEnumerable<string> WellformedBlobNames
+        {
+            get
+            {
+                var random = new Random();
+
+                var acceptableCharacters =
+                    Enumerable
+                        .Range(97, 26)
+                        .Select(value => (char) value) // lower case a-z
+                        .Concat(
+                            Enumerable
+                                .Range(65, 26)
+                                .Select(value => (char) value)) // upper case A-Z
+                        .Concat(
+                            Enumerable
+                                .Range(48, 10)
+                                .Select(value => (char) value)) // 0-9
+                        .Concat(new[] { '!', '/', '-', '_', '.', '*', '\'', '(', ')' })
+                        .ToArray();
+
+                var fixture = new Fixture();
+                fixture.Customizations.Add(
+                    new FiniteSequenceGenerator<char>(acceptableCharacters));
+
+                yield return new string(fixture.CreateMany<char>(random.Next(1, BlobName.MaxLength + 1)).ToArray());
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(NotWellformedCases))]
+        public void ValueIsNotWellformed(string value)
+        {
+            Assert.Throws<ArgumentException>(() => new BlobName(value));
+        }
+
+        public static IEnumerable<object[]> NotWellformedCases
+        {
+            get { return NotWellformedBlobNames.Select(@case => new object[] { @case }); }
+        }
+
+        public static IEnumerable<string> NotWellformedBlobNames
+        {
+            get
+            {
+                var generator = new Generator<char>(new Fixture());
+
+                var acceptableCharacters =
+                    Enumerable
+                        .Range(97, 26)
+                        .Select(value => (char) value) // lower case a-z
+                        .Concat(
+                            Enumerable
+                                .Range(65, 26)
+                                .Select(value => (char) value)) // upper case A-Z
+                        .Concat(
+                            Enumerable
+                                .Range(48, 10)
+                                .Select(value => (char) value)) // 0-9
+                        .Concat(new[] { '!', '/', '-', '_', '.', '*', '\'', '(', ')' })
+                        .ToArray();
+
+                yield return new string(
+                    generator
+                        .Where(candidate => !Array.Exists(acceptableCharacters, character => character == candidate))
+                        .Take(3)
+                        .ToArray()
+                );
+            }
         }
 
         [Fact]

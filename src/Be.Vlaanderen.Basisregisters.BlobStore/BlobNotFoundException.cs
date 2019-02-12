@@ -7,13 +7,13 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
         public BlobName Name { get; }
 
         public BlobNotFoundException(BlobName name)
-            : base("The blob with name {0} was not found.")
+            : base($"The blob with name {name} was not found.")
         {
             Name = name;
         }
-        
+
         public BlobNotFoundException(BlobName name, Exception exception)
-            : base("The blob with name {0} was not found.", exception)
+            : base($"The blob with name {name} was not found.", exception)
         {
             Name = name;
         }

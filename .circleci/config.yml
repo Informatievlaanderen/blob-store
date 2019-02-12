@@ -4,6 +4,10 @@ jobs:
   build:
     docker:
       - image: basisregisters/build-agent:latest
+      - image: minio/minio:latest
+        environment:
+          MINIO_ACCESS_KEY: AKIAIOSFODNN7EXAMPLE
+          MINIO_SECRET_KEY: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
       - image: mcr.microsoft.com/mssql/server:latest
         environment:
           ACCEPT_EULA: Y
@@ -22,6 +26,9 @@ jobs:
       GIT_COMMITTER_EMAIL: informatie.vlaanderen@vlaanderen.be
       CONFLUENCE_USERNAME: david.cumps@kb.vlaanderen.be
       SA_PASSWORD: E@syP@ssw0rd
+      MINIO_PORT: 9000
+      MINIO_ACCESS_KEY: AKIAIOSFODNN7EXAMPLE
+      MINIO_SECRET_KEY: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
       CI: true
 
     steps:

@@ -13,3 +13,4 @@ Albedo
 Docker.DotNet
 
 System.Data.SqlClient
+AWSSDK.S3

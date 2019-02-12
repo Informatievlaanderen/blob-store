@@ -27,6 +27,16 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Memory
                 : Task.FromResult<BlobObject>(null);
         }
 
+        public Task<bool> BlobExistsAsync(BlobName name, CancellationToken cancellationToken = default)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return Task.FromCanceled<bool>(cancellationToken);
+            }
+
+            return Task.FromResult(_storage.ContainsKey(name));
+        }
+
         public async Task CreateBlobAsync(BlobName name, Metadata metadata, ContentType contentType, Stream content,
             CancellationToken cancellationToken = default)
         {
