@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/informatievlaanderen/object-store/compare/v1.0.0...v1.1.0) (2019-02-12)
+
+
+### Features
+
+* introduction of s3blobclient, blobexistsasync() ([22668e6](https://github.com/informatievlaanderen/object-store/commit/22668e6))
+
 # 1.0.0 (2019-01-15)
 
 
