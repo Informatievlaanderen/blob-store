@@ -5,6 +5,7 @@ jobs:
     docker:
       - image: basisregisters/build-agent:latest
       - image: minio/minio:latest
+        command: server /data
         environment:
           MINIO_ACCESS_KEY: AKIAIOSFODNN7EXAMPLE
           MINIO_SECRET_KEY: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
