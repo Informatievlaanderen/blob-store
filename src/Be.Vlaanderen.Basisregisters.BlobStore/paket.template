@@ -16,7 +16,8 @@ description Blob storage abstraction on top of SQL Server.
 
 dependencies
   framework: netstandard20
-    System.Data.SqlClient 4.6.0
+    System.Data.SqlClient >= LOCKEDVERSION
+    AWSSDK.S3 >= LOCKEDVERSION
 
 files
   bin\Release\netstandard2.0\Be.Vlaanderen.Basisregisters.BlobStore.dll => lib\netstandard2.0
