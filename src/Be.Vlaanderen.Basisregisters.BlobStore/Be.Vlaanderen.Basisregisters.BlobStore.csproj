@@ -1,23 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\packages\Be.Vlaanderen.Basisregisters.Build.Pipeline\Content\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.Library.props" />
+
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
-    <LangVersion>latest</LangVersion>
-    <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
-
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
-    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
-    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-
     <RootNamespace>Be.Vlaanderen.Basisregisters.BlobStore</RootNamespace>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <!-- Disable Paket restore under NCrunch build -->
-    <PaketRestoreDisabled Condition="'$(NCrunch)' == '1'">True</PaketRestoreDisabled>
   </PropertyGroup>
 
   <Import Project="..\..\.paket\Paket.Restore.targets" />

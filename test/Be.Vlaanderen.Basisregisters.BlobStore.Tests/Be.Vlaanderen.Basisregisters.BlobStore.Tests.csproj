@@ -1,30 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\packages\Be.Vlaanderen.Basisregisters.Build.Pipeline\Content\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.Test.props" />
+
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
-    <LangVersion>latest</LangVersion>
-    <RuntimeFrameworkVersion>2.2.0</RuntimeFrameworkVersion>
-    <DisableImplicitFrameworkReferences>True</DisableImplicitFrameworkReferences>
-
-    <EnableDefaultContentItems>false</EnableDefaultContentItems>
-
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
-    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
-    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-
-    <OutputType>Exe</OutputType>
-
-    <IsPackable>false</IsPackable>
-    <IsTestProject>true</IsTestProject>
     <RootNamespace>Be.Vlaanderen.Basisregisters.BlobStore</RootNamespace>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <!-- Disable Paket restore under NCrunch build -->
-    <PaketRestoreDisabled Condition="'$(NCrunch)' == '1'">True</PaketRestoreDisabled>
   </PropertyGroup>
 
   <ItemGroup>
