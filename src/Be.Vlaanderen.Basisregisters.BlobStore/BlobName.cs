@@ -3,6 +3,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
     using System;
     using System.Diagnostics.Contracts;
     using System.Linq;
+    using System.Text;
 
     public readonly struct BlobName : IEquatable<BlobName>
     {
