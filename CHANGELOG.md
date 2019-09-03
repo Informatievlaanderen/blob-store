@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/informatievlaanderen/object-store/compare/v1.2.0...v1.3.0) (2019-09-03)
+
+
+### Features
+
+* support for storing blobs in the filesystem ([506fa41](https://github.com/informatievlaanderen/object-store/commit/506fa41))
+
 # [1.2.0](https://github.com/informatievlaanderen/object-store/compare/v1.1.1...v1.2.0) (2019-08-21)
 
 
