@@ -60,7 +60,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Memory
                 {
                     if (_storage.ContainsKey(name))
                     {
-                        return Task.FromResult<Stream>(new MemoryStream(buffer, false));
+                        return Task.FromResult<Stream>(new ForwardOnlyStream(new MemoryStream(buffer, false)));
                     }
 
                     throw new BlobNotFoundException(name);

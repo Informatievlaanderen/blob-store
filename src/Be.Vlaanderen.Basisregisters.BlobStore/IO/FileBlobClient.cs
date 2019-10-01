@@ -63,7 +63,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.IO
                             if(valueLength != -1) contentReader.ReadString();
                         }
                     }
-                    return Task.FromResult<Stream>(contentFileStream);
+                    return Task.FromResult<Stream>(new ForwardOnlyStream(contentFileStream));
                 }));
             }
         }

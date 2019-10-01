@@ -1,9 +1,10 @@
 namespace Be.Vlaanderen.Basisregisters.BlobStore
 {
     using System;
-    using System.Data.SqlClient;
     using System.IO;
+    using System.IO.Compression;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
     using AutoFixture;
     using Xunit;
@@ -71,6 +72,44 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
             var outputStream = new MemoryStream();
             await result.CopyToAsync(outputStream);
             Assert.Equal(bytes, outputStream.ToArray());
+        }
+
+        [Fact]
+        public async Task OpenExistingBlobAsZipArchiveHasExpectedBehavior()
+        {
+            var sut = await CreateClient();
+            var name = _fixture.Create<BlobName>();
+            var metadata = _fixture.Create<Metadata>();
+            var contentType = _fixture.Create<ContentType>();
+            var inputStream = new MemoryStream();
+            using (var archive = new ZipArchive(inputStream, ZipArchiveMode.Create, true))
+            {
+                var entry = archive.CreateEntry("content.txt");
+                using (var entryStream = entry.Open())
+                using (var writer = new StreamWriter(entryStream))
+                {
+                    await writer.WriteLineAsync("lorum.ipsum");
+                    await writer.FlushAsync();
+                }
+                await inputStream.FlushAsync();
+            }
+            inputStream.Position = 0;
+            await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+            var blob = await sut.GetBlobAsync(name);
+
+            var result = await blob.OpenAsync();
+
+            Assert.NotNull(result);
+            using (var archive = new ZipArchive(result, ZipArchiveMode.Read))
+            {
+                var entry = archive.GetEntry("content.txt");
+                using (var entryStream = entry.Open())
+                using (var reader = new StreamReader(entryStream))
+                {
+                    var line = await reader.ReadLineAsync();
+                    Assert.Equal("lorum.ipsum", line);
+                }
+            }
         }
 
         [Fact]
