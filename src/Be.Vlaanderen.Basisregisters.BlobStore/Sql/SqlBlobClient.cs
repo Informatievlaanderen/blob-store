@@ -68,11 +68,13 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Sql
                                             contentCancellationToken);
                                     if (!contentReader.IsClosed && contentReader.Read())
                                     {
-                                        return new DisposableStream(
-                                            contentReader.GetStream(0),
-                                            contentReader,
-                                            contentCommand,
-                                            contentConnection);
+                                        return new ForwardOnlyStream(
+                                            new DisposableStream(
+                                                contentReader.GetStream(0),
+                                                contentReader,
+                                                contentCommand,
+                                                contentConnection)
+                                        );
                                     }
 
                                     throw new BlobNotFoundException(name);

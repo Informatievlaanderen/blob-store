@@ -45,7 +45,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
                                 BucketName = _bucket,
                                 Key = name.ToString()
                             }, contentCancellationToken);
-                            return contentResponse.ResponseStream;
+                            return new ForwardOnlyStream(contentResponse.ResponseStream);
                         }
                         catch (AmazonS3Exception exception) when (
                             exception.ErrorType == ErrorType.Sender
