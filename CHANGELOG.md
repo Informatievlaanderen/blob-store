@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/informatievlaanderen/object-store/compare/v1.3.0...v1.3.1) (2019-10-01)
+
+
+### Bug Fixes
+
+* only support forward only streams ([eb85b14](https://github.com/informatievlaanderen/object-store/commit/eb85b14))
+
 # [1.3.0](https://github.com/informatievlaanderen/object-store/compare/v1.2.0...v1.3.0) (2019-09-03)
 
 
