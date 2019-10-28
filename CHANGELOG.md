@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/informatievlaanderen/object-store/compare/v1.3.1...v1.3.2) (2019-10-28)
+
+
+### Bug Fixes
+
+* upgrade build tools, move to fake 5 ([c2f5d9a](https://github.com/informatievlaanderen/object-store/commit/c2f5d9a))
+
 ## [1.3.1](https://github.com/informatievlaanderen/object-store/compare/v1.3.0...v1.3.1) (2019-10-01)
 
 
