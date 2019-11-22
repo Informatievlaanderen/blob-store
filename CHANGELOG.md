@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/informatievlaanderen/object-store/compare/v1.3.2...v2.0.0) (2019-11-22)
+
+
+### Code Refactoring
+
+* upgrade to netcoreapp30 ([11ec0e8](https://github.com/informatievlaanderen/object-store/commit/11ec0e8))
+
+
+### BREAKING CHANGES
+
+* Upgrade to .NET Core 3
+
 ## [1.3.2](https://github.com/informatievlaanderen/object-store/compare/v1.3.1...v1.3.2) (2019-10-28)
 
 
