@@ -52,10 +52,13 @@ public interface IBlobClient
 {
   // get a blob from storage including its name, metadata, content type and a way to open the content stream
   Task<BlobObject> GetBlobAsync(BlobName name, CancellationToken cancellationToken = default);
+  
   // check if the blob is already in storage
   Task<bool> BlobExistsAsync(BlobName name, CancellationToken cancellationToken = default);
+
   // create a new blob in storage with name, metadata, content type and a content stream
   Task CreateBlobAsync(BlobName name, Metadata metadata, ContentType contentType, Stream content, CancellationToken cancellationToken = default);
+
   // delete a blob from storage
   Task DeleteBlobAsync(BlobName name, CancellationToken cancellationToken = default);
 }

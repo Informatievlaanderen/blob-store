@@ -15,10 +15,10 @@ licenseUrl https://opensource.org/licenses/MIT
 description Blob storage abstraction on top of SQL Server.
 
 dependencies
-  framework: netstandard20
+  framework: netcoreapp30
     System.Data.SqlClient >= LOCKEDVERSION
     AWSSDK.S3 >= LOCKEDVERSION
 
 files
-  bin\Release\netstandard2.0\Be.Vlaanderen.Basisregisters.BlobStore.dll => lib\netstandard2.0
-  bin\Release\netstandard2.0\Be.Vlaanderen.Basisregisters.BlobStore.pdb => lib\netstandard2.0
+  bin\Release\netcoreapp3.0\Be.Vlaanderen.Basisregisters.BlobStore.dll => lib\netcoreapp3.0
+  bin\Release\netcoreapp3.0\Be.Vlaanderen.Basisregisters.BlobStore.pdb => lib\netcoreapp3.0
