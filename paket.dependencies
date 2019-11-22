@@ -9,7 +9,7 @@ source https://api.nuget.org/v3/index.json
 // source https://informatievlaanderen.myget.org/F/nuget-mirror/api/v3/index.json username: "%MYGET_FEED_USER%" password: "%MYGET_FEED_PASS%" authtype: "basic"
 
 // PRODUCTION STUFF
-nuget System.Data.SqlClient 4.7.0
+nuget Microsoft.Data.SqlClient 1.1.0
 nuget System.Collections.Immutable 1.6.0
 
 nuget AWSSDK.S3 3.3.108.1

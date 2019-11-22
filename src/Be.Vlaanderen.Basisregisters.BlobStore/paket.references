@@ -1,4 +1,4 @@
-System.Data.SqlClient
+Microsoft.Data.SqlClient
 System.Collections.Immutable
 
 AWSSDK.S3
