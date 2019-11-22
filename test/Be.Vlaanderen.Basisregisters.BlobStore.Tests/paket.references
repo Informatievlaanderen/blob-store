@@ -8,5 +8,5 @@ AutoFixture.Idioms
 Albedo
 Docker.DotNet
 
-System.Data.SqlClient
+Microsoft.Data.SqlClient
 AWSSDK.S3
