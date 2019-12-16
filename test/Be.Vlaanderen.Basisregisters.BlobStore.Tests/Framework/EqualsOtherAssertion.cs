@@ -2,6 +2,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Framework
 {
     using System;
     using System.Globalization;
+    using System.Linq;
     using System.Reflection;
     using AutoFixture;
     using AutoFixture.Idioms;
@@ -53,16 +54,42 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Framework
                 return;
             }
 
-            var instance = Builder.CreateAnonymous(methodInfo.ReflectedType);
-            var other = Builder.CreateAnonymous(methodInfo.ReflectedType);
-            var equalsResult = instance.Equals(other);
-
-            if (equalsResult)
+            var constructorInfos = methodInfo.ReflectedType.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (constructorInfos.Length == 1 && constructorInfos[0].GetParameters().Length == 1)
             {
-                throw new EqualsOverrideException(string.Format(CultureInfo.CurrentCulture,
-                    "The type '{0}' overrides the object.Equals(object) method incorrectly, " +
-                    "calling x.Equals(y) should return false.",
-                    methodInfo.ReflectedType.FullName));
+                var constructorInfo = constructorInfos[0];
+                var parameterInfo = constructorInfo.GetParameters()[0];
+                var left = Builder.CreateAnonymous(parameterInfo.ParameterType);
+                var right = Builder.CreateAnonymous(parameterInfo.ParameterType);
+                while (left.Equals(right))
+                {
+                    right = Builder.CreateAnonymous(parameterInfo.ParameterType);
+                }
+                var self = constructorInfo.Invoke(new [] { left });
+                var other = constructorInfo.Invoke(new [] { right });
+                var equalsResult = self.Equals(other);
+
+                if (equalsResult)
+                {
+                    throw new EqualsOverrideException(string.Format(CultureInfo.CurrentCulture,
+                        "The type '{0}' overrides the object.Equals(object) method incorrectly, " +
+                        "calling x.Equals(y) should return false.",
+                        methodInfo.ReflectedType.FullName));
+                }
+            }
+            else
+            {
+                var self = Builder.CreateAnonymous(methodInfo.ReflectedType);
+                var other = Builder.CreateAnonymous(methodInfo.ReflectedType);
+                var equalsResult = self.Equals(other);
+
+                if (equalsResult)
+                {
+                    throw new EqualsOverrideException(string.Format(CultureInfo.CurrentCulture,
+                        "The type '{0}' overrides the object.Equals(object) method incorrectly, " +
+                        "calling x.Equals(y) should return false.",
+                        methodInfo.ReflectedType.FullName));
+                }
             }
         }
     }
