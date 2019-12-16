@@ -2,6 +2,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.Linq;
     using AutoFixture;
     using AutoFixture.Idioms;
@@ -15,6 +16,20 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
         public MetadataTests()
         {
             _fixture = new Fixture();
+            _fixture.Customize<ImmutableList<KeyValuePair<MetadataKey, string>>>(
+                composer => composer.FromFactory<int>(seed =>
+                {
+                    var entries = new Random(seed).Next(1, 5);
+                    var value = ImmutableList<KeyValuePair<MetadataKey, string>>.Empty;
+                    for (var index = 0; index < entries; index++)
+                    {
+                        value = value.Add(new KeyValuePair<MetadataKey, string>(_fixture.Create<MetadataKey>(),
+                            _fixture.Create<string>()));
+                    }
+
+                    return value;
+                })
+            );
             _fixture.CustomizeMetadata();
             _fixture.CustomizeMetadataKey();
         }
