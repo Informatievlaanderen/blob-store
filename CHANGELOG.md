@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/informatievlaanderen/object-store/compare/v2.0.0...v2.1.0) (2019-12-16)
+
+
+### Features
+
+* upgrade to netcoreapp31 ([be9ecb4](https://github.com/informatievlaanderen/object-store/commit/be9ecb462a3a2e928348793acc3ef1f9ce5ab0e8))
+
 # [2.0.0](https://github.com/informatievlaanderen/object-store/compare/v1.3.2...v2.0.0) (2019-11-22)
 
 
