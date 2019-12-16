@@ -16,7 +16,7 @@ description Blob storage abstraction on top of SQL Server.
 
 dependencies
   framework: netcoreapp31
-    System.Data.SqlClient >= LOCKEDVERSION
+    Microsoft.Data.SqlClient >= LOCKEDVERSION
     AWSSDK.S3 >= LOCKEDVERSION
 
 files
