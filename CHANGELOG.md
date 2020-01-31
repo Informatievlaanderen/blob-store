@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/informatievlaanderen/object-store/compare/v2.1.0...v2.2.0) (2020-01-31)
+
+
+### Features
+
+* upgrade netcoreapp31 and dependencies ([dec7ffc](https://github.com/informatievlaanderen/object-store/commit/dec7ffce2a5e406fdfe8d501b9a39476f7ef70a8))
+
 # [2.1.0](https://github.com/informatievlaanderen/object-store/compare/v2.0.0...v2.1.0) (2019-12-16)
 
 
