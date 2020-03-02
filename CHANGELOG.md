@@ -1,3 +1,10 @@
+## [2.2.1](https://github.com/informatievlaanderen/object-store/compare/v2.2.0...v2.2.1) (2020-03-02)
+
+
+### Bug Fixes
+
+* bump netcore to 3.1.2 ([5ad778a](https://github.com/informatievlaanderen/object-store/commit/5ad778a13254e7a1ba012ab88e33cdde6bffbe9f))
+
 # [2.2.0](https://github.com/informatievlaanderen/object-store/compare/v2.1.0...v2.2.0) (2020-01-31)
 
 
