@@ -1,6 +1,6 @@
 {
   "name": "object-store",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Object storage abstraction on top of SQL Server.",
   "author": "Basisregisters Vlaanderen",
   "license": "MIT",

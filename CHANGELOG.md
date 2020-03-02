@@ -1,3 +1,10 @@
+## [2.2.2](https://github.com/informatievlaanderen/object-store/compare/v2.2.1...v2.2.2) (2020-03-02)
+
+
+### Bug Fixes
+
+* force build ([175a03c](https://github.com/informatievlaanderen/object-store/commit/175a03cd918ade861e2048e368d25c53fa30025c))
+
 ## [2.2.1](https://github.com/informatievlaanderen/object-store/compare/v2.2.0...v2.2.1) (2020-03-02)
 
 
