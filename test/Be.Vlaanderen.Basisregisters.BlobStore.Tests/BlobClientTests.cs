@@ -39,8 +39,10 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
             var metadata = _fixture.Create<Metadata>();
             var contentType = _fixture.Create<ContentType>();
             var bytes = _fixture.CreateMany<byte>(new Random().Next(1, 100)).ToArray();
-            var inputStream = new MemoryStream(bytes);
-            await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+            using(var inputStream = new MemoryStream(bytes))
+            {
+                await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+            }
 
             var result = await sut.GetBlobAsync(name);
 
@@ -48,10 +50,14 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
             Assert.Equal(name, result.Name);
             Assert.Equal(metadata, result.Metadata);
             Assert.Equal(contentType, result.ContentType);
-            var openedStream = await result.OpenAsync();
-            var outputStream = new MemoryStream();
-            await openedStream.CopyToAsync(outputStream);
-            Assert.Equal(bytes, outputStream.ToArray());
+            using(var openedStream = await result.OpenAsync())
+            {
+                using(var outputStream = new MemoryStream())
+                {
+                    await openedStream.CopyToAsync(outputStream);
+                    Assert.Equal(bytes, outputStream.ToArray());
+                }
+            }
         }
 
         [Fact]
@@ -62,16 +68,21 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
             var metadata = _fixture.Create<Metadata>();
             var contentType = _fixture.Create<ContentType>();
             var bytes = _fixture.CreateMany<byte>(new Random().Next(1, 100)).ToArray();
-            var inputStream = new MemoryStream(bytes);
-            await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+            using(var inputStream = new MemoryStream(bytes))
+            {
+                await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+            }
             var blob = await sut.GetBlobAsync(name);
 
-            var result = await blob.OpenAsync();
-
-            Assert.NotNull(result);
-            var outputStream = new MemoryStream();
-            await result.CopyToAsync(outputStream);
-            Assert.Equal(bytes, outputStream.ToArray());
+            using(var result = await blob.OpenAsync())
+            {
+                Assert.NotNull(result);
+                using(var outputStream = new MemoryStream())
+                {
+                    await result.CopyToAsync(outputStream);
+                    Assert.Equal(bytes, outputStream.ToArray());
+                }
+            }
         }
 
         [Fact]
@@ -81,33 +92,37 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
             var name = _fixture.Create<BlobName>();
             var metadata = _fixture.Create<Metadata>();
             var contentType = _fixture.Create<ContentType>();
-            var inputStream = new MemoryStream();
-            using (var archive = new ZipArchive(inputStream, ZipArchiveMode.Create, true))
+            using(var inputStream = new MemoryStream())
             {
-                var entry = archive.CreateEntry("content.txt");
-                using (var entryStream = entry.Open())
-                using (var writer = new StreamWriter(entryStream))
+                using (var archive = new ZipArchive(inputStream, ZipArchiveMode.Create, true))
                 {
-                    await writer.WriteLineAsync("lorum.ipsum");
-                    await writer.FlushAsync();
+                    var entry = archive.CreateEntry("content.txt");
+                    using (var entryStream = entry.Open())
+                    using (var writer = new StreamWriter(entryStream))
+                    {
+                        await writer.WriteLineAsync("lorum.ipsum");
+                        await writer.FlushAsync();
+                    }
+                    await inputStream.FlushAsync();
                 }
-                await inputStream.FlushAsync();
-            }
-            inputStream.Position = 0;
-            await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
-            var blob = await sut.GetBlobAsync(name);
+            
+                inputStream.Position = 0;
+                await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+                var blob = await sut.GetBlobAsync(name);
 
-            var result = await blob.OpenAsync();
-
-            Assert.NotNull(result);
-            using (var archive = new ZipArchive(result, ZipArchiveMode.Read))
-            {
-                var entry = archive.GetEntry("content.txt");
-                using (var entryStream = entry.Open())
-                using (var reader = new StreamReader(entryStream))
+                using(var result = await blob.OpenAsync())
                 {
-                    var line = await reader.ReadLineAsync();
-                    Assert.Equal("lorum.ipsum", line);
+                    Assert.NotNull(result);
+                    using (var archive = new ZipArchive(result, ZipArchiveMode.Read))
+                    {
+                        var entry = archive.GetEntry("content.txt");
+                        using (var entryStream = entry.Open())
+                        using (var reader = new StreamReader(entryStream))
+                        {
+                            var line = await reader.ReadLineAsync();
+                            Assert.Equal("lorum.ipsum", line);
+                        }
+                    }
                 }
             }
         }
@@ -120,8 +135,10 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
             var metadata = _fixture.Create<Metadata>();
             var contentType = _fixture.Create<ContentType>();
             var bytes = _fixture.CreateMany<byte>(new Random().Next(1, 100)).ToArray();
-            var inputStream = new MemoryStream(bytes);
-            await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+            using(var inputStream = new MemoryStream(bytes))
+            {
+                await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+            }
             var blob = await sut.GetBlobAsync(name);
             await sut.DeleteBlobAsync(name);
 
@@ -136,19 +153,24 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
             var metadata = _fixture.Create<Metadata>();
             var contentType = _fixture.Create<ContentType>();
             var bytes = _fixture.CreateMany<byte>(new Random().Next(1, 100)).ToArray();
-            var inputStream = new MemoryStream(bytes);
-
-            await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+            using(var inputStream = new MemoryStream(bytes))
+            {
+                await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+            }
 
             var result = await sut.GetBlobAsync(name);
             Assert.NotNull(result);
             Assert.Equal(name, result.Name);
             Assert.Equal(metadata, result.Metadata);
             Assert.Equal(contentType, result.ContentType);
-            var openedStream = await result.OpenAsync();
-            var outputStream = new MemoryStream();
-            await openedStream.CopyToAsync(outputStream);
-            Assert.Equal(bytes, outputStream.ToArray());
+            using(var openedStream = await result.OpenAsync())
+            {
+                using(var outputStream = new MemoryStream())
+                {
+                    await openedStream.CopyToAsync(outputStream);
+                    Assert.Equal(bytes, outputStream.ToArray());
+                }
+            }
         }
 
         [Fact]
@@ -159,13 +181,14 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
             var metadata = _fixture.Create<Metadata>();
             var contentType = _fixture.Create<ContentType>();
             var bytes = _fixture.CreateMany<byte>(new Random().Next(1, 100)).ToArray();
-            var inputStream = new MemoryStream(bytes);
-            await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
-
-            var exception = await Assert.ThrowsAsync<BlobAlreadyExistsException>(
-                () => sut.CreateBlobAsync(name, metadata, contentType, inputStream));
-
-            Assert.Equal(name, exception.Name);
+            using(var inputStream = new MemoryStream(bytes))
+            {
+                await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+            
+                var exception = await Assert.ThrowsAsync<BlobAlreadyExistsException>(
+                    () => sut.CreateBlobAsync(name, metadata, contentType, inputStream));
+                Assert.Equal(name, exception.Name);
+            }
         }
 
         [Fact]
@@ -187,8 +210,10 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
             var metadata = _fixture.Create<Metadata>();
             var contentType = _fixture.Create<ContentType>();
             var bytes = _fixture.CreateMany<byte>(new Random().Next(1, 100)).ToArray();
-            var inputStream = new MemoryStream(bytes);
-            await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+            using(var inputStream = new MemoryStream(bytes))
+            {
+                await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+            }
 
             await sut.DeleteBlobAsync(name);
 
@@ -203,8 +228,10 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
             var metadata = _fixture.Create<Metadata>();
             var contentType = _fixture.Create<ContentType>();
             var bytes = _fixture.CreateMany<byte>(new Random().Next(1, 100)).ToArray();
-            var inputStream = new MemoryStream(bytes);
-            await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+            using(var inputStream = new MemoryStream(bytes))
+            {
+                await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+            }
             await sut.DeleteBlobAsync(name);
 
             await sut.DeleteBlobAsync(name);
@@ -220,9 +247,10 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
             var metadata = _fixture.Create<Metadata>();
             var contentType = _fixture.Create<ContentType>();
             var bytes = _fixture.CreateMany<byte>(new Random().Next(1, 100)).ToArray();
-            var inputStream = new MemoryStream(bytes);
-
-            await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+            using(var inputStream = new MemoryStream(bytes))
+            {
+                await sut.CreateBlobAsync(name, metadata, contentType, inputStream);
+            }
 
             var result = await sut.BlobExistsAsync(name);
             Assert.True(result);
