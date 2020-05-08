@@ -1,4 +1,4 @@
-# Be.Vlaanderen.Basisregisters.BlobStore
+# Be.Vlaanderen.Basisregisters.BlobStore [![Build Status](https://github.com/Informatievlaanderen/blob-store/workflows/CI/badge.svg)](https://github.com/Informatievlaanderen/blob-store/actions)
 
 Blob storage abstraction on top of AWS S3, Memory, Files and SQL Server.
 It's a bit leaky in that not all stores behave exactly in the same way and have different constraints towards names and 
