@@ -82,7 +82,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
                     from mediaSubtype in ContentMediaSubtypeTests.WellformedMediaSubtypes.OrderBy(_ => random.Next()).Take(10)
                     select mediaType + "/" + mediaSubtype;
 
-                foreach(var @case in cases)
+                foreach(var @case in cases.Distinct())
                 {
                     yield return new object[] { @case };
                 }
@@ -109,7 +109,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
                     from mediaSubtype in ContentMediaSubtypeTests.NotWellformedMediaSubtypes.OrderBy(_ => random.Next()).Take(10)
                     select mediaType + "/" + mediaSubtype;
 
-                foreach(var @case in cases)
+                foreach(var @case in cases.Distinct())
                 {
                     yield return new object[] { @case };
                 }
