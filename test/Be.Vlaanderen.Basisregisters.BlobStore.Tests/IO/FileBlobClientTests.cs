@@ -24,11 +24,32 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.IO
 
         public void Dispose()
         {
-            foreach (var file in _temporaryDirectory.EnumerateFiles())
+            Retry(() =>
+                    {
+                        foreach (var file in _temporaryDirectory.EnumerateFiles())
+                            file.Delete();
+                        _temporaryDirectory.Delete();
+                    },
+                    TimeSpan.FromSeconds(5))
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        private async Task Retry(Action action, TimeSpan timeOut)
+        {
+            var time = Stopwatch.StartNew();
+            while (time.ElapsedMilliseconds < timeOut.Milliseconds)
             {
-                file.Delete();
+                try
+                {
+                    action();
+                    return;
+                }
+                catch (IOException)
+                {
+                    await Task.Delay(100);
+                }
             }
-            _temporaryDirectory.Delete();
         }
     }
 }
