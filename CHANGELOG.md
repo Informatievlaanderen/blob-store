@@ -1,3 +1,12 @@
+## [2.2.3](https://github.com/informatievlaanderen/object-store/compare/v2.2.2...v2.2.3) (2020-05-12)
+
+
+### Bug Fixes
+
+* add build services: minio, sql ([80410a2](https://github.com/informatievlaanderen/object-store/commit/80410a2514bfc4d2270256cd67a00c53ee5270e8))
+* expose sql server port ([e0322e1](https://github.com/informatievlaanderen/object-store/commit/e0322e103059c50209157fd2de90336f55245a3b))
+* move to GH-actions ([cbd35e8](https://github.com/informatievlaanderen/object-store/commit/cbd35e8e90a972d77289403cd904ce198b047f31))
+
 ## [2.2.2](https://github.com/informatievlaanderen/object-store/compare/v2.2.1...v2.2.2) (2020-03-02)
 
 
