@@ -2,13 +2,13 @@ framework: netcoreapp31
 source https://api.nuget.org/v3/index.json
 
 // PRODUCTION STUFF
-nuget System.Collections.Immutable 1.7.0
-nuget Microsoft.Data.SqlClient 1.1.2
+nuget System.Collections.Immutable 1.7.1
+nuget Microsoft.Data.SqlClient 1.1.3
 
-nuget AWSSDK.S3 3.3.110.66
+nuget AWSSDK.S3 3.3.110.70
 
 // VBR STUFF
-nuget Be.Vlaanderen.Basisregisters.Build.Pipeline 4.0.6
+nuget Be.Vlaanderen.Basisregisters.Build.Pipeline 4.1.0
 
 // TEST STUFF
 nuget Microsoft.NET.Test.Sdk 16.6.1
