@@ -1,3 +1,10 @@
+## [2.2.5](https://github.com/informatievlaanderen/object-store/compare/v2.2.4...v2.2.5) (2020-05-19)
+
+
+### Bug Fixes
+
+* update s3 deps ([04df45c](https://github.com/informatievlaanderen/object-store/commit/04df45cbcee5c37d94695318cb20530ae583e4a4))
+
 ## [2.2.4](https://github.com/informatievlaanderen/object-store/compare/v2.2.3...v2.2.4) (2020-05-18)
 
 
