@@ -1,6 +1,6 @@
 {
   "name": "object-store",
-  "version": "2.2.5",
+  "version": "2.2.6",
   "description": "Object storage abstraction on top of SQL Server.",
   "author": "Basisregisters Vlaanderen",
   "license": "MIT",
@@ -48,7 +48,10 @@
     ]
   },
   "release": {
-    "branches": [ "master", "main" ],
+    "branches": [
+      "master",
+      "main"
+    ],
     "verifyConditions": [
       "@semantic-release/changelog",
       "@semantic-release/git",
