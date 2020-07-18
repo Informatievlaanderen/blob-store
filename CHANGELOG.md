@@ -1,3 +1,10 @@
+## [2.2.7](https://github.com/informatievlaanderen/object-store/compare/v2.2.6...v2.2.7) (2020-07-18)
+
+
+### Bug Fixes
+
+* move to 3.1.6 ([fb5a0c6](https://github.com/informatievlaanderen/object-store/commit/fb5a0c6cb6bc308196263c28580f778b95a15d1e))
+
 ## [2.2.6](https://github.com/informatievlaanderen/object-store/compare/v2.2.5...v2.2.6) (2020-06-19)
 
 
