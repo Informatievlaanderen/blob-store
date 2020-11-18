@@ -1,3 +1,10 @@
+## [2.2.9](https://github.com/informatievlaanderen/object-store/compare/v2.2.8...v2.2.9) (2020-11-18)
+
+
+### Bug Fixes
+
+* remove set-env usage in gh-actions ([08697f8](https://github.com/informatievlaanderen/object-store/commit/08697f8a481abb2043d0992858160cd0a5eba590))
+
 ## [2.2.8](https://github.com/informatievlaanderen/object-store/compare/v2.2.7...v2.2.8) (2020-09-21)
 
 
