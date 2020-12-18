@@ -27,7 +27,12 @@ Target.create "Lib_Build" (fun _ ->
     buildTest "Be.Vlaanderen.Basisregisters.BlobStore.Tests"
 )
 
-Target.create "Lib_Test" (fun _ -> [ "test" @@ "Be.Vlaanderen.Basisregisters.BlobStore.Tests" ] |> List.iter testWithDotNet)
+Target.create "Lib_Test" (fun _ ->
+    [
+        "test" @@ "Be.Vlaanderen.Basisregisters.BlobStore.Tests"
+    ] |> List.iter testWithDotNet
+)
+
 Target.create "Lib_Publish" (fun _ -> publishSource "Be.Vlaanderen.Basisregisters.BlobStore")
 Target.create "Lib_Pack" (fun _ -> pack "Be.Vlaanderen.Basisregisters.BlobStore")
 
