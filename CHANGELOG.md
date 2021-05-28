@@ -1,3 +1,10 @@
+## [2.2.12](https://github.com/informatievlaanderen/object-store/compare/v2.2.11...v2.2.12) (2021-05-28)
+
+
+### Bug Fixes
+
+* move to 5.0.6 ([25d9f57](https://github.com/informatievlaanderen/object-store/commit/25d9f57650ff86dfe8fc0ece6b0108c5cbea100b))
+
 ## [2.2.11](https://github.com/informatievlaanderen/object-store/compare/v2.2.10...v2.2.11) (2021-02-02)
 
 
