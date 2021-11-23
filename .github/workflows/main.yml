@@ -34,7 +34,7 @@ jobs:
       uses: actions/checkout@v2.3.4
 
     - name: Cache NPM
-      uses: actions/cache@v2.1.6
+      uses: actions/cache@v2.1.7
       env:
         cache-name: cache-npm
       with:
@@ -44,7 +44,7 @@ jobs:
           ${{ runner.os }}-build-${{ env.cache-name }}-
 
     - name: Cache Paket
-      uses: actions/cache@v2.1.6
+      uses: actions/cache@v2.1.7
       env:
         cache-name: cache-paket
       with:
@@ -54,7 +54,7 @@ jobs:
           ${{ runner.os }}-build-${{ env.cache-name }}-
 
     - name: Cache Python
-      uses: actions/cache@v2.1.6
+      uses: actions/cache@v2.1.7
       env:
         cache-name: cache-pip
       with:
