@@ -21,7 +21,7 @@ jobs:
           - 9000:9000
         options: --name minio-server
       sql:
-        image: mcr.microsoft.com/mssql/server:latest
+        image: mcr.microsoft.com/mssql/server:2019-latest
         ports:
           - 1433:1433
         env:
