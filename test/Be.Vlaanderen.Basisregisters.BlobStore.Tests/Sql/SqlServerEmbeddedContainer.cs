@@ -58,8 +58,7 @@ ALTER DATABASE [{database}] SET READ_COMMITTED_SNAPSHOT ON";
             {
                 Image = new ImageSettings
                 {
-                    Registry = "mcr.microsoft.com",
-                    Name = "mssql/server",
+                    Name = "mcr.microsoft.com/mssql/server",
                     Tag = "2019-latest"
                 };
 

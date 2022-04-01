@@ -43,7 +43,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
             {
                 Image = new ImageSettings
                 {
-                    Name = "bitnami/minio"
+                    Name = "minio/minio"
                 };
 
                 Container = new ContainerSettings
