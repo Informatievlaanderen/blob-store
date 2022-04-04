@@ -1,6 +1,7 @@
 namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
 {
     using System;
+    using Amazon;
     using Amazon.Runtime;
     using Amazon.S3;
     using Framework;
@@ -25,31 +26,32 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
             UseAccelerateEndpoint = false,
             EndpointDiscoveryEnabled = false,
             ForcePathStyle = true,
+            RegionEndpoint = RegionEndpoint.EUWest1,
             ServiceURL = $"http://localhost:{HostPort}"
         };
 
         public AmazonS3Client CreateClient()
         {
             return new AmazonS3Client(
-                new BasicAWSCredentials(MinioContainerConfiguration.ACCESS_KEY, MinioContainerConfiguration.SECRET_KEY),
+                new BasicAWSCredentials(MinioContainerConfiguration.MINIO_ROOT_USER, MinioContainerConfiguration.MINIO_ROOT_PASSWORD),
                 S3Config);
         }
 
         private class MinioContainerConfiguration : DockerContainerConfiguration
         {
-            public const string ACCESS_KEY = "AKIAIOSFODNN7EXAMPLE";
-            public const string SECRET_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
+            public const string MINIO_ROOT_USER = "AKIAIOSFODNN7EXAMPLE";
+            public const string MINIO_ROOT_PASSWORD = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
             public MinioContainerConfiguration()
             {
                 Image = new ImageSettings
                 {
-                    Name = "minio/minio"
+                    Name = "bitnami/minio"
                 };
 
                 Container = new ContainerSettings
                 {
                     Name = "blobstore-s3-minio",
-                    Command = new [] { "server", "/data" },
+                    Command = new [] { "server", "/data", "--console-address ':9001'" },
                     PortBindings = new[]
                     {
                         new PortBinding
@@ -60,8 +62,8 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
                     },
                     EnvironmentVariables = new []
                     {
-                        "MINIO_ACCESS_KEY=" + ACCESS_KEY,
-                        "MINIO_SECRET_KEY=" + SECRET_KEY
+                        "MINIO_ROOT_USER=" + MINIO_ROOT_USER,
+                        "MINIO_ROOT_PASSWORD=" + MINIO_ROOT_PASSWORD
                     }
                 };
 
@@ -71,7 +73,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
                     {
                         try
                         {
-                            using (var client = new AmazonS3Client(new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY), S3Config))
+                            using (var client = new AmazonS3Client(new BasicAWSCredentials(MINIO_ROOT_USER, MINIO_ROOT_PASSWORD), S3Config))
                             {
                                 await client.ListBucketsAsync();
                             }

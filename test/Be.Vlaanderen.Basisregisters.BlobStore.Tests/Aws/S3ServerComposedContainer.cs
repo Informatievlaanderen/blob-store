@@ -2,37 +2,38 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
 {
     using System;
     using System.Threading.Tasks;
+    using Amazon;
     using Amazon.Runtime;
     using Amazon.S3;
 
     public class S3ServerComposedContainer : IS3Server
     {
         private int _hostPort;
-        private string _accessKey;
-        private string _secretKey;
-        
+        private string _rootUser;
+        private string _rootPassword;
+
         public S3ServerComposedContainer()
         {
             if (Environment.GetEnvironmentVariable("MINIO_PORT") == null)
             {
                 throw new Exception("The MINIO_PORT environment variable is missing.");
             }
-            
-            if (Environment.GetEnvironmentVariable("MINIO_ACCESS_KEY") == null)
+
+            if (Environment.GetEnvironmentVariable("MINIO_ROOT_USER") == null)
             {
-                throw new Exception("The MINIO_ACCESS_KEY environment variable is missing.");
+                throw new Exception("The MINIO_ROOT_USER environment variable is missing.");
             }
-                
-            if (Environment.GetEnvironmentVariable("MINIO_SECRET_KEY") == null)
+
+            if (Environment.GetEnvironmentVariable("MINIO_ROOT_PASSWORD") == null)
             {
-                throw new Exception("The MINIO_SECRET_KEY environment variable is missing.");
+                throw new Exception("The MINIO_ROOT_PASSWORD environment variable is missing.");
             }
 
             _hostPort = int.Parse(Environment.GetEnvironmentVariable("MINIO_PORT"));
-            _accessKey = Environment.GetEnvironmentVariable("MINIO_ACCESS_KEY");
-            _secretKey = Environment.GetEnvironmentVariable("MINIO_SECRET_KEY");
+            _rootUser = Environment.GetEnvironmentVariable("MINIO_ROOT_USER");
+            _rootPassword = Environment.GetEnvironmentVariable("MINIO_ROOT_PASSWORD");
         }
-        
+
         public async Task InitializeAsync()
         {
             async Task<TimeSpan> WaitUntilAvailable(int current)
@@ -41,7 +42,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
                 {
                     try
                     {
-                        using (var client = new AmazonS3Client(new BasicAWSCredentials(_accessKey, _secretKey), CreateClientConfig()))
+                        using (var client = new AmazonS3Client(new BasicAWSCredentials(_rootUser, _rootPassword), CreateClientConfig()))
                         {
                             await client.ListBucketsAsync();
                         }
@@ -76,7 +77,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
         public AmazonS3Client CreateClient()
         {
             return new AmazonS3Client(
-                new BasicAWSCredentials(_accessKey, _secretKey),
+                new BasicAWSCredentials(_rootUser, _rootPassword),
                 CreateClientConfig());
         }
 
@@ -93,6 +94,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
                 UseAccelerateEndpoint = false,
                 EndpointDiscoveryEnabled = false,
                 ForcePathStyle = true,
+                RegionEndpoint = RegionEndpoint.EUWest1,
                 ServiceURL = $"http://localhost:{_hostPort}"
             };
         }

@@ -5,7 +5,7 @@ source https://api.nuget.org/v3/index.json
 nuget System.Collections.Immutable 6.0.0
 nuget Microsoft.Data.SqlClient 4.1.0
 
-nuget AWSSDK.S3 3.7.8.11
+nuget AWSSDK.S3 3.7.8.14
 
 // VBR STUFF
 nuget Be.Vlaanderen.Basisregisters.Build.Pipeline 6.0.3

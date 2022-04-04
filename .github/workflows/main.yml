@@ -15,10 +15,11 @@ jobs:
       minio:
         image: minio/minio:latest
         env:
-          MINIO_ACCESS_KEY: AKIAIOSFODNN7EXAMPLE
-          MINIO_SECRET_KEY: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+          MINIO_ROOT_USER: AKIAIOSFODNN7EXAMPLE
+          MINIO_ROOT_PASSWORD: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
         ports:
           - 9000:9000
+          - 9001:9001
         options: --name minio-server
       sql:
         image: mcr.microsoft.com/mssql/server:2019-latest
