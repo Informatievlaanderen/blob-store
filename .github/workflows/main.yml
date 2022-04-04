@@ -116,8 +116,8 @@ jobs:
         SQL_SERVER: sql-server
         SA_PASSWORD: E@syP@ssw0rd
         MINIO_PORT: 9000
-        MINIO_ACCESS_KEY: AKIAIOSFODNN7EXAMPLE
-        MINIO_SECRET_KEY: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+        MINIO_ROOT_USER: AKIAIOSFODNN7EXAMPLE
+        MINIO_ROOT_PASSWORD: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 
     - name: Set Release Version
       run: |
