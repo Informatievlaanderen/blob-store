@@ -13,7 +13,7 @@ jobs:
 
     services:
       minio:
-        image: minio/minio:latest
+        image: bitnami/minio:latest
         env:
           MINIO_ROOT_USER: AKIAIOSFODNN7EXAMPLE
           MINIO_ROOT_PASSWORD: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
