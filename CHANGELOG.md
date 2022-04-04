@@ -1,3 +1,25 @@
+# [3.0.0](https://github.com/informatievlaanderen/object-store/compare/v2.2.12...v3.0.0) (2022-04-04)
+
+
+### Bug Fixes
+
+* change minio deprecated ENV var ([1bdb6d1](https://github.com/informatievlaanderen/object-store/commit/1bdb6d148c6b13b3293201c0340513aa105d9ee0))
+* minio/minio instead of bitnami/minio ([b23170f](https://github.com/informatievlaanderen/object-store/commit/b23170ff3a03a0cc139266ec20526168087489af))
+* minio/minio to bitnami/minio ([7eb1cbb](https://github.com/informatievlaanderen/object-store/commit/7eb1cbb10f0308de952af6ae8d038fed0ecf7f0b))
+* update main.yml ([66c46cc](https://github.com/informatievlaanderen/object-store/commit/66c46ccf320788d498f9d01504fbbdd506a2430a))
+* use bitnami image as described in main.yaml ([2a2f4c4](https://github.com/informatievlaanderen/object-store/commit/2a2f4c47f89a58c7e05886ee27f2f01a738d7ada))
+* use correct container images ([8ed664a](https://github.com/informatievlaanderen/object-store/commit/8ed664ad4d95296f9842ba4ac505ed98654357e0))
+
+
+### Features
+
+* move to dotnet 6.0.3 ([f3c912e](https://github.com/informatievlaanderen/object-store/commit/f3c912edc63c625c07dc31d5f19accca166defbe))
+
+
+### BREAKING CHANGES
+
+* move to dotnet 6.0.3
+
 ## [2.2.12](https://github.com/informatievlaanderen/object-store/compare/v2.2.11...v2.2.12) (2021-05-28)
 
 
