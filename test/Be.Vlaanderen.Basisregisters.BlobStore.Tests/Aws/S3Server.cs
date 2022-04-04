@@ -10,7 +10,10 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
 
         public S3Server()
         {
-            if (Environment.GetEnvironmentVariable("CI") == null)
+            // Environment.SetEnvironmentVariable("MOCK-CI", "true");
+
+            if (Environment.GetEnvironmentVariable("CI") == null
+                && Environment.GetEnvironmentVariable("MOCK-CI") == null)
             {
                 _inner = new S3ServerEmbeddedContainer();
             }
