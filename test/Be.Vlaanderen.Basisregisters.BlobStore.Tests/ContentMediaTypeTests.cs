@@ -88,7 +88,8 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
                     "model",
                     "multipart",
                     "text",
-                    "video"
+                    "video",
+                    "binary"
                 };
                 foreach (var knownMediaType in knownMediaTypes)
                 {

@@ -18,7 +18,8 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
             "model",
             "multipart",
             "text",
-            "video"
+            "video",
+            "binary"
         };
 
         private readonly string _value;
