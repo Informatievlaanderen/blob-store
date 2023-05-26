@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/informatievlaanderen/object-store/compare/v3.0.0...v3.1.0) (2023-05-26)
+
+
+### Features
+
+* add binary as KnownMediaTypes ([1032866](https://github.com/informatievlaanderen/object-store/commit/10328669a199d517cf5f6ec791cba52e708de51c))
+
 # [3.0.0](https://github.com/informatievlaanderen/object-store/compare/v2.2.12...v3.0.0) (2022-04-04)
 
 
