@@ -116,6 +116,12 @@ jobs:
     - name: Test
       shell: bash
       run: dotnet dotcover test --dcReportType=HTML --nologo --no-build Be.Vlaanderen.Basisregisters.BlobStore.sln
+      env:
+        SQL_SERVER: sql-server
+        SA_PASSWORD: E@syP@ssw0rd
+        MINIO_PORT: 9000
+        MINIO_ROOT_USER: AKIAIOSFODNN7EXAMPLE
+        MINIO_ROOT_PASSWORD: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 
     - name: Sonar end build & analyze
       env:
