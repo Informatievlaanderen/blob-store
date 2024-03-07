@@ -12,6 +12,25 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
 
+    services:
+      minio:
+        image: bitnami/minio:latest
+        env:
+          MINIO_ROOT_USER: AKIAIOSFODNN7EXAMPLE
+          MINIO_ROOT_PASSWORD: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+        ports:
+          - 9000:9000
+          - 9001:9001
+        options: --name minio-server
+      sql:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        ports:
+          - 1433:1433
+        env:
+          ACCEPT_EULA: Y
+          SA_PASSWORD: E@syP@ssw0rd
+        options: --name sql-server
+
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
