@@ -15,11 +15,11 @@ licenseUrl https://opensource.org/licenses/MIT
 description Blob storage abstraction on top of SQL Server.
 
 dependencies
-  framework: net6.0
+  framework: netstandard2.1
     System.Collections.Immutable >= LOCKEDVERSION
     Microsoft.Data.SqlClient >= LOCKEDVERSION
     AWSSDK.S3 >= LOCKEDVERSION
 
 files
-  bin\Release\net6.0\Be.Vlaanderen.Basisregisters.BlobStore.dll => lib\net6.0
-  bin\Release\net6.0\Be.Vlaanderen.Basisregisters.BlobStore.pdb => lib\net6.0
+  Be.Vlaanderen.Basisregisters.BlobStore.dll => lib\netstandard2.1
+  Be.Vlaanderen.Basisregisters.BlobStore.pdb => lib\netstandard2.1
