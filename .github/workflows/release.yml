@@ -61,7 +61,7 @@ jobs:
     if: ${{ (github.repository_owner == 'Informatievlaanderen') && (needs.set-release-version.outputs.version != 'none') }}
     with:
       pack-file: Be.Vlaanderen.Basisregisters.BlobStore 
-      test-project: Be.Vlaanderen.Basisregisters.BlobStore.Tests
+      #test-project: Be.Vlaanderen.Basisregisters.BlobStore.Tests needs minioservices
       build-project: Be.Vlaanderen.Basisregisters.BlobStore
       semver: ${{ needs.set-release-version.outputs.version }}
       dotnet-version: ${{ vars.VBR_DOTNET_VERSION_8 }}
