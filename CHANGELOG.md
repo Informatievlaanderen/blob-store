@@ -1,3 +1,15 @@
+# [4.0.0](https://github.com/informatievlaanderen/object-store/compare/v3.1.0...v4.0.0) (2024-03-07)
+
+
+### Features
+
+* move to dotnet 8.0.2 ([9f81357](https://github.com/informatievlaanderen/object-store/commit/9f813573d110dd2b33c3e4fbad8c8f7cb121ee89))
+
+
+### BREAKING CHANGES
+
+* move to dotnet 8.0.02
+
 # [3.1.0](https://github.com/informatievlaanderen/object-store/compare/v3.0.0...v3.1.0) (2023-05-26)
 
 
