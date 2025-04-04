@@ -4,11 +4,11 @@
     ".NETStandard,Version=v2.1": {
       "AWSSDK.S3": {
         "type": "Direct",
-        "requested": "[3.7.305.30, )",
-        "resolved": "3.7.305.30",
-        "contentHash": "Y0iiT4Rl1pQrr58UXOZaig2D4l7BkFOXcUF5BSBeJIYxmsXodEfvvGemVj1ySg6Cxf+0qWmh5qqQTRN5jCyIwg==",
+        "requested": "[3.7.416.4, )",
+        "resolved": "3.7.416.4",
+        "contentHash": "rC3SrwEeR2WB3ob4wiDIyl1lOG3x+9BCCgzK33krzPi8p5QMvqX0Hc7Z7diL2kipwy+8aEg6FAoQWGZE7y0TYA==",
         "dependencies": {
-          "AWSSDK.Core": "[3.7.302.15, 4.0.0)"
+          "AWSSDK.Core": "[3.7.402.34, 4.0.0)"
         }
       },
       "Microsoft.Data.SqlClient": {
@@ -58,8 +58,8 @@
       },
       "AWSSDK.Core": {
         "type": "Transitive",
-        "resolved": "3.7.302.15",
-        "contentHash": "DgSlbR4JIthe+iYl4qVfz3Lkh59th/gNPYloxf9iU0pIx3hHYqJ0UJRg9mwBcmpeyBccRSwdNoo9yF9X3tb/rg==",
+        "resolved": "3.7.402.34",
+        "contentHash": "T7cNu0VNl/bPZVPFVXhoaXyqtedhX6xplv/u9UF/FOn2WCxNVLDSEHoZZ8n719hJStGZsh5m6zaMq4+sehuUFg==",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "1.1.0"
         }
