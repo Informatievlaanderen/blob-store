@@ -22,7 +22,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Aws
             _bucket = bucket ?? throw new ArgumentNullException(nameof(bucket));
         }
 
-        public async Task<BlobObject> GetBlobAsync(BlobName name, CancellationToken cancellationToken = default)
+        public async Task<BlobObject?> GetBlobAsync(BlobName name, CancellationToken cancellationToken = default)
         {
             try
             {
