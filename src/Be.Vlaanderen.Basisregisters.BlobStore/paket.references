@@ -1,7 +1,0 @@
-System.Collections.Immutable
-Microsoft.Data.SqlClient
-
-AWSSDK.S3
-
-SourceLink.Embed.AllSourceFiles
-SourceLink.Copy.PdbFiles

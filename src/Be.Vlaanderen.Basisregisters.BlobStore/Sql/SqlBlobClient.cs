@@ -22,7 +22,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Sql
             _text = new SqlCommandText(schema);
         }
 
-        public async Task<BlobObject> GetBlobAsync(BlobName name, CancellationToken cancellationToken = default)
+        public async Task<BlobObject?> GetBlobAsync(BlobName name, CancellationToken cancellationToken = default)
         {
             var nameParameter = CreateSqlParameter(
                 "@Name",
@@ -411,7 +411,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Sql
                 set => _inner.WriteTimeout = value;
             }
 
-            public override object InitializeLifetimeService()
+            public override object? InitializeLifetimeService()
             {
                 return _inner.InitializeLifetimeService();
             }
