@@ -1,3 +1,15 @@
+# [5.0.0](https://github.com/Informatievlaanderen/blob-store/compare/v4.0.0...v5.0.0) (2025-04-04)
+
+
+### Code Refactoring
+
+* use renovate and nuget + update pipeline ([8d621e9](https://github.com/Informatievlaanderen/blob-store/commit/8d621e9414aa43755b1e20c0ad7767b06a68e022))
+
+
+### BREAKING CHANGES
+
+* update to dotnet 9
+
 # [4.0.0](https://github.com/informatievlaanderen/object-store/compare/v3.1.0...v4.0.0) (2024-03-07)
 
 
