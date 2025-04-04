@@ -1,6 +1,5 @@
 namespace Be.Vlaanderen.Basisregisters.BlobStore.Memory
 {
-    using System;
     using System.Collections.Concurrent;
     using System.IO;
     using System.Threading;
@@ -15,16 +14,16 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.Memory
             _storage = new ConcurrentDictionary<BlobName, BlobObject>();
         }
 
-        public Task<BlobObject> GetBlobAsync(BlobName name, CancellationToken cancellationToken = default)
+        public Task<BlobObject?> GetBlobAsync(BlobName name, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                return Task.FromCanceled<BlobObject>(cancellationToken);
+                return Task.FromCanceled<BlobObject?>(cancellationToken);
             }
 
             return _storage.TryGetValue(name, out var result)
                 ? Task.FromResult(result)
-                : Task.FromResult<BlobObject>(null);
+                : Task.FromResult((BlobObject?)null);
         }
 
         public Task<bool> BlobExistsAsync(BlobName name, CancellationToken cancellationToken = default)

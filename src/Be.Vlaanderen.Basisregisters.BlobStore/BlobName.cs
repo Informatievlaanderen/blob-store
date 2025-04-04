@@ -50,7 +50,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
         }
 
         public bool Equals(BlobName other) => _value == other._value;
-        public override bool Equals(object other) => other is BlobName instance && Equals(instance);
+        public override bool Equals(object? other) => other is BlobName instance && Equals(instance);
         public override int GetHashCode() => _value.GetHashCode();
         public override string ToString() => _value;
         public static implicit operator string(BlobName instance) => instance._value;

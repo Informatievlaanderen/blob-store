@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\packages\Be.Vlaanderen.Basisregisters.Build.Pipeline\Content\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.Test.props" />
+  <Import Project="..\..\.build\Be.Vlaanderen.Basisregisters.Build.Pipeline\Content\Be.Vlaanderen.Basisregisters.Build.Pipeline.Settings.Test.props" />
 
   <PropertyGroup>
     <RootNamespace>Be.Vlaanderen.Basisregisters.BlobStore</RootNamespace>
@@ -10,5 +10,18 @@
     <ProjectReference Include="..\..\src\Be.Vlaanderen.Basisregisters.BlobStore\Be.Vlaanderen.Basisregisters.BlobStore.csproj" />
   </ItemGroup>
 
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="AutoFixture" />
+    <PackageReference Include="AutoFixture.Idioms" />
+    <PackageReference Include="Albedo" />
+    <PackageReference Include="Docker.DotNet" />
+
+    <PackageReference Include="Microsoft.Data.SqlClient" />
+    <PackageReference Include="AWSSDK.S3" />
+
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Shouldly" />
+  </ItemGroup>
 </Project>

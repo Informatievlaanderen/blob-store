@@ -104,7 +104,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
         }
 
         public bool Equals(ContentMediaType other) => _value == other._value;
-        public override bool Equals(object other) => other is ContentMediaType instance && Equals(instance);
+        public override bool Equals(object? other) => other is ContentMediaType instance && Equals(instance);
         public override int GetHashCode() => _value.GetHashCode();
         public override string ToString() => _value;
         public static implicit operator string(ContentMediaType instance) => instance._value;
