@@ -16,17 +16,17 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore.IO
             _directory = directory ?? throw new ArgumentNullException(nameof(directory));
         }
 
-        public Task<BlobObject> GetBlobAsync(BlobName name, CancellationToken cancellationToken = default)
+        public Task<BlobObject?> GetBlobAsync(BlobName name, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                return Task.FromCanceled<BlobObject>(cancellationToken);
+                return Task.FromCanceled<BlobObject?>(cancellationToken);
             }
 
             var file = new FileInfo(Path.Combine(_directory.FullName, FileName.From(name)));
             if (!file.Exists)
             {
-                return Task.FromResult<BlobObject>(null);
+                return Task.FromResult<BlobObject?>(null);
             }
 
             using (var fileStream = file.OpenRead())

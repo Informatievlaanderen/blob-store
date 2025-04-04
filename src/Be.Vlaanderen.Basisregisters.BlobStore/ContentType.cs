@@ -57,7 +57,7 @@ namespace Be.Vlaanderen.Basisregisters.BlobStore
         }
 
         public bool Equals(ContentType other) => _type == other._type && _subtype == other._subtype;
-        public override bool Equals(object other) => other is ContentType instance && Equals(instance);
+        public override bool Equals(object? other) => other is ContentType instance && Equals(instance);
         public override int GetHashCode() => _type.GetHashCode() ^ _subtype.GetHashCode();
         public override string ToString() => _type + "/" + _subtype;
         public static implicit operator string(ContentType instance) => instance.ToString();
