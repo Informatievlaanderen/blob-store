@@ -6,7 +6,7 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageVersion Include="System.Collections.Immutable" Version="9.0.3" />
-        <PackageVersion Include="Microsoft.Data.SqlClient" Version="6.0.1" />
+        <PackageVersion Include="Microsoft.Data.SqlClient" Version="6.1.5" />
         <PackageVersion Include="AWSSDK.S3" Version="3.7.416.4" />
 
         <PackageVersion Include="AutoFixture" Version="4.18.1" />
