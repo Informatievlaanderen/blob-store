@@ -1364,14 +1364,14 @@
         "dependencies": {
           "AWSSDK.S3": "[3.7.416.4, )",
           "Microsoft.Data.SqlClient": "[6.0.1, )",
-          "System.Collections.Immutable": "[9.0.3, )"
+          "System.Collections.Immutable": "[9.0.16, )"
         }
       },
       "System.Collections.Immutable": {
         "type": "CentralTransitive",
-        "requested": "[9.0.3, )",
-        "resolved": "9.0.3",
-        "contentHash": "CfYi30Pbpw9aGpXVLcoGt+yM0egrE8M1DUOOwdAWOAQ2QZkXkSgjonqZYvtKdxUF1XJaLCp0OdTXueeAeUHSlQ=="
+        "requested": "[9.0.16, )",
+        "resolved": "9.0.16",
+        "contentHash": "ywBuBb7adwDYcFzgLSAg8mcf4v5oyPbsAFS+Bwt11le7cDXknN5j4LoXasftJRYB18LnK2KZ9wdFOjNmaUI9Yg=="
       }
     },
     "net9.0/linux-x64": {
