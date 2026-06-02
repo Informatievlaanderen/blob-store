@@ -14,7 +14,7 @@ jobs:
 
     services:
       minio:
-        image: bitnami/minio:latest
+        image: minio/minio:latest
         env:
           MINIO_ROOT_USER: AKIAIOSFODNN7EXAMPLE
           MINIO_ROOT_PASSWORD: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
@@ -33,11 +33,11 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     # needed for Sonar, default is 11 and is decprecated
     - name: Set up JDK 17
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         java-version: 17
         distribution: 'temurin'
@@ -47,9 +47,9 @@ jobs:
       shell: bash
 
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: ${{ vars.VBR_DOTNET_VERSION_9 }}
+        dotnet-version: ${{ vars.VBR_DOTNET_VERSION_10 }}
         cache: true
         cache-dependency-path: "**/packages.lock.json"
 
@@ -65,7 +65,7 @@ jobs:
         dotnet restore --locked-mode
 
     - name: Cache SonarCloud packages
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ~/sonar/cache
         key: ${{ runner.os }}-sonar
@@ -73,7 +73,7 @@ jobs:
         
     - name: Cache SonarCloud scanner
       id: cache-sonar-scanner
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ./.sonar/scanner
         key: ${{ runner.os }}-sonar-scanner
@@ -82,7 +82,7 @@ jobs:
     - name: Install DotCover
       shell: bash
       run: |
-        dotnet tool install --global JetBrains.dotCover.CommandLineTools
+        dotnet tool install --global JetBrains.dotCover.CommandLineTools --version 2026.1.0.1
         
     - name: Install SonarCloud scanner
       if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
@@ -98,7 +98,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.VBR_SONAR_TOKEN }}
       shell: bash
       run: |
-        ./.sonar/scanner/dotnet-sonarscanner begin /k:"Informatievlaanderen_blob-store" /o:"informatievlaanderen" /d:sonar.token="${{ secrets.VBR_SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.dotcover.reportsPaths=dotCover.Output.html > /dev/null 2>&1
+        ./.sonar/scanner/dotnet-sonarscanner begin /k:"Informatievlaanderen_blob-store" /o:"informatievlaanderen" /d:sonar.token="${{ secrets.VBR_SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.dotcover.reportsPaths=dotCover.Output.xml > /dev/null 2>&1
 
     - name: Build
       shell: bash
@@ -107,7 +107,7 @@ jobs:
 
     - name: Test
       shell: bash
-      run: dotnet dotCover cover-dotnet --ReportType=HTML --Output=dotCover.Output.html -- test --nologo --no-build Be.Vlaanderen.Basisregisters.BlobStore.sln
+      run: dotCover cover --target-working-directory . --xml-report-output=dotCover.Output.xml -- test --nologo --no-build Be.Vlaanderen.Basisregisters.BlobStore.sln
       env:
         SQL_SERVER: sql-server
         SA_PASSWORD: E@syP@ssw0rd

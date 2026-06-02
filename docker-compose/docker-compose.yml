@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   minio:
-    image: 'bitnami/minio:latest'
+    image: 'minio/minio:latest'
     hostname: minio-server
     container_name: minio-server
     environment:
