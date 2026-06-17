@@ -1,3 +1,10 @@
+# [5.1.0](https://github.com/Informatievlaanderen/blob-store/compare/v5.0.0...v5.1.0) (2026-06-17)
+
+
+### Features
+
+* update packages ([dd7cecc](https://github.com/Informatievlaanderen/blob-store/commit/dd7cecc005bea9bf8d197527d67c1fee56993718))
+
 # [5.0.0](https://github.com/Informatievlaanderen/blob-store/compare/v4.0.0...v5.0.0) (2025-04-04)
 
 
